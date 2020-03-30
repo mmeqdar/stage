@@ -1,0 +1,64 @@
+.new-customer-content {
+    padding-left: 15px;
+  }
+  
+  .new-customer-content span {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .new-customer-content p {
+    margin-bottom: 20px;
+  }
+  .new-customer-content-ar {
+      padding-left: 15px;
+    }
+    .new-customer-content-ar span {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-align: right;
+    }
+    
+    .new-customer-content-ar p {
+      margin-bottom: 20px;
+      text-align: right;
+    }
+    .new-customer-content {
+        padding-left: 0;
+        margin-top: 30px;
+      }
+      .new-customer-content {
+        padding-left: 0;
+        margin-top: 30px;
+      }
+      .btn{display:inline-block;font-weight:400;color:#049233;text-align:center;vertical-align:middle;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-color:transparent;border:1px solid transparent;padding:.375rem .75rem;font-size:1rem;line-height:1.5;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}
+      .btn{transition:none}
+      .btn:focus{outline:0;box-shadow:0 0 0 .2rem rgba(3, 6, 10, 0.25)}
+      .btn {
+        border: 1px solid transparent;
+        padding: 11px 25px;
+        line-height: initial;
+        border-radius: 0;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        text-transform: uppercase;
+        font-weight: 400;
+        font-size: 14px;
+      }
+      .btn-a
+      {
+          margin-left: 60%;
+      }
+      .btn.disabled, .btn:disabled {
+        opacity: 1;
+      }
+      .login-area .section-title {
+        margin-bottom: 25px;
+      }
+      .login-area{
+          margin-top: 10%;
+      }

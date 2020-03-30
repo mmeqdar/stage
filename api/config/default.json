@@ -1,0 +1,23 @@
+{
+    "Database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "",
+        "database": "hypertube"
+    },
+    "Mail": {
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "secure": true,
+        "auth": {
+            "user": "akamli1337@gmail.com",
+            "pass": "iiipvdpxvkvsefei"
+        }
+    },
+    "Github": {
+        "GITHUB_CLIENT_ID": "6971f33362c66588c949",
+        "GITHUB_CLIENT_SECRET": "0e8d1c0c648b502204398a67f437a17dbbe5e2e8",
+        "GITHUB_CALLBACK": "http://localhost:8080/login/github"
+    }
+}

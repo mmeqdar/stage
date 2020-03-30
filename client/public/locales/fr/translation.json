@@ -1,0 +1,75 @@
+{
+    "copyright": "Droits d'auteur ",
+    "login": 
+    {   "GENERAL": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+        "DATA_MISSING": "Un ou plusieurs arguments sont manquants.",
+        "LOGINPHONE": "Numéro de téléphone incorrect",
+        "LOGINPSWD": "Mot de passe incorrect",
+        "VERIF": "Compte n'est pas vérifié",
+        "NAME": "Le nom complet doit avoir entre 5 et 30 et seulement alphabétique",
+        "PHONE":"Le numéro de téléphone n'est pas valide",
+        "PSWD":"Password requires at least 1 lower 1 upper case letter and 1 digit and between 5 and 20",
+        "REGISTER_PHONE": "Le numéro de téléphone déjà existe",
+        "CODE": "Code invalide",
+        "REGION":"Région invalide",
+        "PSWD_CONFI":"Mot de passe de confirmation incorrect",
+        "LABEL_PHONE":"Numéro De Téléphone",
+        "LABEL_PASS":"Mot De Passe",
+        "BTN_LOGIN":"Se Connecter",
+        "TO_SIGNUP":"Vous n'avez pas de compte? S'inscrire",
+        "F_MDP":"Mot de passe oublié?",
+        "h1":"Se Connecter",
+        "TEXT":"Ouvrez un compte gratuit dans notre magasin. L'inscription est rapide et facile. Il vous permet de pouvoir commander dans notre boutique. Pour commencer vos achats, cliquez sur s'inscrire.",
+        "OPEN":"Créez un compte"
+    },
+    "register": 
+    {  
+        "LABEL_NAME":"Nom Complet",
+        "LABEL_PHONE":"Numéro De Téléphone",
+        "LABEL_PASS":"Mot De Passe",
+        "LABEL_CPASS":"Confirmation Mot De Passe",
+        "LABEL_REG":"Région",
+        "BTN_SIGNUP":"S'inscrire",
+        "TO_SIGNIN":"Je suis déjà membre",
+        "h1":"S'inscrire"
+    },
+    "nav":
+    {
+        "HOME":"Accueil",
+        "ACCOUNT":"Compte",
+        "CART":"Voir le panier",
+        "LANGUAGE":"Langue",
+        "LOGIN":"Se connecter",
+        "REGISTER":"S'inscrire"
+    },
+    "home":
+    {
+        "PRICE":"DH",
+        "BUY":"Acheter",
+        "KG":"KG",
+        "WELCOME":"Bienvenue",
+        "CATEGO":"Catégories",
+        "REGION":"Régions"
+    },
+    "annonce":
+    {
+        "CATEGORY":"Catégorie",
+        "QUANTITY":"Quantité",
+        "DESCRIPTION":"Description",
+        "PRICE":"Prix",
+        "ERR_CATEGORY":"Choisir une catégorie !!",
+        "ERR_QUANTITY":"La quantité n'est pas valide !!",
+        "ERR_DESCRIPTION":"Rédiger une description !!",
+        "ERR_PRICE":"Le prix n'est pas valide !!",
+        "ERR_IMAGE":"Choisir des images!!",
+        "ANN_SUCCESS":"Finir !!",
+        "ADD_AD":"Ajoutez votre ANNONCE",
+        "BTN":"Déposer votre annonce",
+        "QUANTITY_WRONG":"La quantité n'est pas valide !!",
+        "PRIX_WRONG":"Le prix n'est pas valide !!",
+        "DES_WRONG":"La description doit contenir moins de 200 !!",
+        "ERR_GENERAL":"Une erreur s'est produite, Veuillez réessayer plus tard !!",
+        "DATA_MISSING": "Un ou plusieurs arguments sont manquants !!"
+    }
+    
+}

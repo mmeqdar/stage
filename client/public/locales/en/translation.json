@@ -1,0 +1,74 @@
+{
+    "copyright": "Copyright ",
+    "login": 
+    {   "GENERAL": "An error occured. Please try Again later.",
+        "DATA_MISSING": "One or more arguments are missing.",
+        "LOGINPHONE": "Wrong phone",
+        "LOGINPSWD": "Wrong password",
+        "VERIF": "Account is not verified",
+        "NAME": "Full name must have between 5 and 30 and only Alphabetic",
+        "PHONE":"Phone is not Valid",
+        "PSWD":"Password requires at least 1 lower 1 upper case letter and 1 digit and between 5 and 20",
+        "REGISTER_PHONE": "PHONE Already Exists",
+        "CODE": " Wrong CODE",
+        "REGION":"Wrong Region",
+        "PSWD_CONFI":"Confirmation Password incorrect",
+        "LABEL_PHONE":"Phone Number",
+        "LABEL_PASS":"Password",
+        "BTN_LOGIN":"Sign In",
+        "TO_SIGNUP":"Don't have an account? Sign Up",
+        "F_MDP":"Forgot password?",
+        "h1":"Sign In",
+        "TEXT":"Sign up for a free account at our store. Registration is quick and easy. It allows you to be able to order from our shop. To start shopping click register.",
+        "OPEN":"Create a Account"
+    },
+    "register": 
+    {  
+        "LABEL_NAME":"Full Name",
+        "LABEL_PHONE":"Phone Number",
+        "LABEL_PASS":"Password",
+        "LABEL_CPASS":"Confirmation Password",
+        "LABEL_REG":"Region",
+        "BTN_SIGNUP":"Sign Up",
+        "TO_SIGNIN":"I am already a member",
+        "h1":"Sign Up"
+    },
+    "home":
+    {
+        "PRICE":"DH",
+        "BUY":"Buy",
+        "KG":"KG",
+        "WELCOME":"welcome",
+        "CATEGO":"Categories",
+        "REGION":"Regions"
+    },
+    "nav":
+    {
+        "HOME":"Home",
+        "ACCOUNT":"Account",
+        "CART":"View Cart",
+        "LANGUAGE":"Language",
+        "LOGIN":"Login",
+        "REGISTER":"Register"
+    },
+    "annonce":
+    {
+        "CATEGORY":"Category",
+        "QUANTITY":"Quantity",
+        "DESCRIPTION":"Description",
+        "PRICE":"Price",
+        "ERR_CATEGORY":"Choose a Category !!",
+        "ERR_QUANTITY":"Quantity is not Valid !!",
+        "ERR_DESCRIPTION":"Write a Description !!",
+        "ERR_PRICE":"Price is not Valid !!",
+        "ERR_IMAGE":"Choose Images !!",
+        "ANN_SUCCESS":"Finishing Up !!",
+        "ADD_AD":"Add your AD",
+        "BTN":"Place your ad",
+        "QUANTITY_WRONG":"Quantity is wrong !! ",
+        "PRIX_WRONG":"Price is wrong !!",
+        "DES_WRONG":"Description must contain less than 200 !!",
+        "GENERAL":"An error occured. Please try Again later !!",
+        "DATA_MISSING": "One or more arguments are missing !!"
+    }
+}
