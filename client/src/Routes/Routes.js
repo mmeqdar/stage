@@ -6,6 +6,9 @@ import newPassword from "./../view/forgot/newPassword";
 import Login from "../view/login/";
 import home from "../view/home/"
 import Annonce from "./../view/annonce";
+import Demande from "./../view/demande"
+
+
 import React from 'react';
 //import { connect } from "react-redux";
 import { Route, BrowserRouter } from 'react-router-dom';
@@ -22,6 +25,7 @@ const Routes = () => {
             <Route exact path="/newPassword" component={newPassword}/>
             <Route exact path="/" component={home}/>
             <Route exact path="/annonce" component={Annonce} />
+            <Route exact path="/demande" component={Demande} />
             </BrowserRouter>
         </>
     )

@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
+window.$user =null
+window.$type = 0
 var localStorage = require('localStorage')
 if(!localStorage.getItem('langue'))
     localStorage.setItem('langue', 'en');

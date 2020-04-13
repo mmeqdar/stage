@@ -12,6 +12,7 @@
         "REGISTER_PHONE": "Le numéro de téléphone déjà existe",
         "CODE": "Code invalide",
         "REGION":"Région invalide",
+        "TYPE":"Type invalide",
         "PSWD_CONFI":"Mot de passe de confirmation incorrect",
         "LABEL_PHONE":"Numéro De Téléphone",
         "LABEL_PASS":"Mot De Passe",
@@ -20,7 +21,10 @@
         "F_MDP":"Mot de passe oublié?",
         "h1":"Se Connecter",
         "TEXT":"Ouvrez un compte gratuit dans notre magasin. L'inscription est rapide et facile. Il vous permet de pouvoir commander dans notre boutique. Pour commencer vos achats, cliquez sur s'inscrire.",
-        "OPEN":"Créez un compte"
+        "OPEN":"Créez un compte",
+        "edit":"Modifier",
+        "update":"Mise à jour réussie",
+        "MY_AD":"Mes annonces"
     },
     "register": 
     {  
@@ -29,6 +33,9 @@
         "LABEL_PASS":"Mot De Passe",
         "LABEL_CPASS":"Confirmation Mot De Passe",
         "LABEL_REG":"Région",
+        "LABEL_TYPE":"type compte",
+        "VENDEUR":"Vendeur",
+        "ACHETEUR":"Acheteur",
         "BTN_SIGNUP":"S'inscrire",
         "TO_SIGNIN":"Je suis déjà membre",
         "h1":"S'inscrire"
@@ -37,7 +44,7 @@
     {
         "HOME":"Accueil",
         "ACCOUNT":"Compte",
-        "CART":"Voir le panier",
+        "CART":"Annonce",
         "LANGUAGE":"Langue",
         "LOGIN":"Se connecter",
         "REGISTER":"S'inscrire"
@@ -49,7 +56,12 @@
         "KG":"KG",
         "WELCOME":"Bienvenue",
         "CATEGO":"Catégories",
-        "REGION":"Régions"
+        "REGION":"Régions",
+        "PRIX":"Prix",
+        "QUAN":"Quantité",
+        "PHO":"Téléphone",
+        "CAT":"Catégorie",
+        "ADD":"Ajouter au chariot"
     },
     "annonce":
     {
@@ -69,7 +81,9 @@
         "PRIX_WRONG":"Le prix n'est pas valide !!",
         "DES_WRONG":"La description doit contenir moins de 200 !!",
         "ERR_GENERAL":"Une erreur s'est produite, Veuillez réessayer plus tard !!",
-        "DATA_MISSING": "Un ou plusieurs arguments sont manquants !!"
+        "DATA_MISSING": "Un ou plusieurs arguments sont manquants !!",
+        "BUTTN":"Éditer votre annonce",
+        "B":"Éditer"
     }
     
 }

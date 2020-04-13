@@ -127,9 +127,8 @@ export default function Annonce(props) {
             props.history.push("/login") 
     })
     axios.post('http://localhost:3001/check_type',{type:localStorage.getItem('type')}).then((r)=>{
-        if(r.data.data == 1)
-            props.history.push("/demande")
-        
+        if(r.data.data == 0)
+            props.history.push("/annonce") 
     })
     const { t } = useTranslation();
     if(localStorage.getItem('langue')  === 'ar')
@@ -178,7 +177,7 @@ export default function Annonce(props) {
         id_category = event.target.value
     };
 
-/*------------------------Drag And Drop-----------------------*/
+//------------------------Drag And Drop-----------------------/
     const [files, setFiles] = useState([]);
     const {getRootProps, getInputProps} = useDropzone({
       accept: 'image/*',
@@ -271,15 +270,9 @@ export default function Annonce(props) {
             msg =  t('annonce.ERR_PRICE')
             setOpen(true);
         }
-        else if(files.length == 0)
-        {
-            msg =  t('annonce.ERR_IMAGE')
-            setOpen(true);
-        }
         else
         {
             for (const key of Object.keys(files)) {
-                console.log(files[key])
                 data.append('pic', files[key])
             }
             data.append('category', id_category)
@@ -288,7 +281,7 @@ export default function Annonce(props) {
             data.append('quantity', quantity)
             data.append('token', localStorage.getItem('token'))
             const con = { headers: { 'Content-Type': 'multipart/form-data; boundary=something' } }
-            axios.post('http://localhost:3001/annonce',data,con)
+            axios.post('http://localhost:3001/demande',data,con)
             .then((r)=>
             {
                 console.log(r.data.status)
@@ -313,7 +306,7 @@ export default function Annonce(props) {
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component="h1" variant="h5" className={classes.h1} >
-           <span className="addd">{t('annonce.ADD_AD')}</span>
+          <span className="add">{t('annonce.ADD_AD')}</span> 
           </Typography>
           <div className="divform">
           <form className={classes.form}  noValidate>

@@ -26,31 +26,6 @@ var mssg =null
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Agri Edge
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-function Copyrightar() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'.'}
-      {new Date().getFullYear()}
-      {' '}
-      <Link color="inherit" href="https://material-ui.com/">
-        AgriEdge
-      </Link>
-      {' © حقوق النشر'}
-    </Typography>
-  );
-}
 const theme = createMuiTheme({
   palette: {
     primary: green,
@@ -102,6 +77,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp(props) {
+  axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
+        if(r.data.data !== "-2")
+            props.history.push("/") 
+  })
   const classes = useStyles();
   const {t} = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -201,9 +180,6 @@ const handleChangePhone =(e)=>
           </Snackbar>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </ContainerR>
   );}
   else
@@ -258,9 +234,6 @@ const handleChangePhone =(e)=>
           </Snackbar>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyrightar />
-      </Box>
     </ContainerR>
   );
   }

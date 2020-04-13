@@ -12,6 +12,7 @@
         "REGISTER_PHONE": "PHONE Already Exists",
         "CODE": " Wrong CODE",
         "REGION":"Wrong Region",
+        "TYPE":"Wrong Type",
         "PSWD_CONFI":"Confirmation Password incorrect",
         "LABEL_PHONE":"Phone Number",
         "LABEL_PASS":"Password",
@@ -20,7 +21,10 @@
         "F_MDP":"Forgot password?",
         "h1":"Sign In",
         "TEXT":"Sign up for a free account at our store. Registration is quick and easy. It allows you to be able to order from our shop. To start shopping click register.",
-        "OPEN":"Create a Account"
+        "OPEN":"Create a Account",
+        "edit":"Edit",
+        "update":"update successful",
+        "MY_AD":"My ads"
     },
     "register": 
     {  
@@ -29,9 +33,13 @@
         "LABEL_PASS":"Password",
         "LABEL_CPASS":"Confirmation Password",
         "LABEL_REG":"Region",
+        "LABEL_TYPE":"account type",
+        "VENDEUR":"Seller",
+        "ACHETEUR":"Buyer",
         "BTN_SIGNUP":"Sign Up",
         "TO_SIGNIN":"I am already a member",
         "h1":"Sign Up"
+
     },
     "home":
     {
@@ -40,13 +48,18 @@
         "KG":"KG",
         "WELCOME":"welcome",
         "CATEGO":"Categories",
-        "REGION":"Regions"
+        "REGION":"Regions",
+        "PRIX":"Price",
+        "QUAN":"Amount",
+        "PHO":"Phone",
+        "CAT":"Category",
+        "ADD":" Add to Cart"
     },
     "nav":
     {
         "HOME":"Home",
         "ACCOUNT":"Account",
-        "CART":"View Cart",
+        "CART":"Ad",
         "LANGUAGE":"Language",
         "LOGIN":"Login",
         "REGISTER":"Register"
@@ -69,6 +82,8 @@
         "PRIX_WRONG":"Price is wrong !!",
         "DES_WRONG":"Description must contain less than 200 !!",
         "GENERAL":"An error occured. Please try Again later !!",
-        "DATA_MISSING": "One or more arguments are missing !!"
+        "DATA_MISSING": "One or more arguments are missing !!",
+        "BUTTN":"Edit your ad",
+        "B":"Edit"
     }
 }

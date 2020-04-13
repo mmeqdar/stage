@@ -11,7 +11,7 @@ import Container from '@material-ui/core/Container';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles , ThemeProvider,createMuiTheme } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import { green , grey} from '@material-ui/core/colors';
 import axios from "axios";
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
@@ -21,7 +21,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined';
 import { useTranslation } from 'react-i18next';
-import './index.css'
+import './index.css';
+import myInitObject from './../../const'
 var mssg = null
 var form={
   phone:null,
@@ -29,33 +30,6 @@ var form={
 }
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-function Copyrightar() {
-  const { t } = useTranslation();
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'.'}
-      {new Date().getFullYear()}
-      {' '}
-      <Link color="inherit" href="https://material-ui.com/">
-        AgriEdge
-      </Link>
-      {' © حقوق النشر'}
-    </Typography>
-  );
-}
-function Copyright() {
-  const { t } = useTranslation();
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Agri Edge
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
 }
 const theme = createMuiTheme({
   palette: {
@@ -101,11 +75,15 @@ const useStyles = makeStyles(theme => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
+   submit: {
+    margin: theme.spacing(0, 0, 2),
   },
   colorLink: {
-    color : green[700],
+    color : grey[800],
+    marginBottom : "30px",
+    '&:hover': {
+      color : green[700],
+    },
   },
   input: {
     color: green[700],
@@ -113,6 +91,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignInSide(props) {
+  
+  /*var { user } = props
+  console.log(user)*/
+  axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
+    console.log(r.data.data)
+      if(r.data.data !== "-2")
+            props.history.push("/") 
+    })
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
 
@@ -162,7 +148,7 @@ export default function SignInSide(props) {
     if(form.pswd === null)
       form.pswd = document.getElementById("password").value
     console.log(form.phone,form.pswd)
-   if(form.phone && form.pswd )
+   if(form.phone!== null && form.pswd !== null )
     {
       if(form.phone.length === 10 && Number.isInteger(parseInt(form.phone)))
         {
@@ -184,7 +170,18 @@ export default function SignInSide(props) {
               {
                   if(r.data.status === "success")
                   {
-                      props.history.push("/account/register") 
+                  /* window.$user = r.data.data
+                  console.log("window : "+r.data.data)*/
+                      localStorage.setItem('token',r.data.token)
+                      localStorage.setItem('type',r.data.type)
+                      if(r.data.data == 1)
+                        {
+                          props.history.push("/") 
+                        }
+                      else
+                        {
+                          props.history.push("/home1")
+                        }
                   }
                   else
                   {
@@ -284,6 +281,7 @@ if(localStorage.getItem('langue')  !== "ar")
                                         type="password"
                                         id="password"
                                         autoComplete="current-password"
+                                        onChange={handleChangePswd}
                                         type={values.showPassword ? 'text' : 'password'}
                                         InputProps={{
                                           startAdornment: <InputAdornment position="start">
@@ -318,7 +316,7 @@ if(localStorage.getItem('langue')  !== "ar")
                                     </Snackbar>
                                       {/* <Grid container > */}
                                         <Grid item>
-                                          <Link href="/account/register" variant="body2" className={classes.colorLink}>
+                                          <Link href="/register" variant="body2" className={classes.colorLink}>
                                             {t('login.TO_SIGNUP')}
                                           </Link>
                                         </Grid>
@@ -327,9 +325,6 @@ if(localStorage.getItem('langue')  !== "ar")
                                       </ThemeProvider>
                                     </form>
                                   </div>
-                                  <Box mt={5}>
-                                        <Copyright />
-                                  </Box>
                                   </ContainerR>
                             </div>
 
@@ -337,7 +332,7 @@ if(localStorage.getItem('langue')  !== "ar")
                                 <div className="new-customer-content">
                                     <span>{t('login.OPEN')}</span>
                                       <p>{t('login.TEXT')}</p>
-                                    <Link href="/account/register" >
+                                    <Link href="/register" >
                                         <a className="btn btn-light">{t('login.OPEN')}</a>
                                     </Link>
                                 </div>
@@ -359,7 +354,7 @@ else
                     <div className="new-customer-content-ar">
                         <span >قم بإنشاء حساب</span>
                         <p>قم بالتسجيل للحصول على حساب مجاني في متجرنا. تسجيل سريع وسهل. يسمح لك أن تكون قادراً على الطلب من متجرنا. لبدء التسوق ، انقر فوق تسجيل.</p>
-                        <Link href="/account/register" >
+                        <Link href="/register" >
                             <a className="btn btn-light btn-a">إنشاء حساب</a>
                         </Link>
                     </div>
@@ -408,8 +403,10 @@ else
                             label="كلمة السر"
                             type="password"
                             id="password"
+                            onChange={handleChangePswd}
                             autoComplete="current-password"
                             type={values.showPassword ? 'text' : 'password'}
+                            
                             InputProps={{
                             startAdornment: <InputAdornment position="start">
                             <IconButton
@@ -424,7 +421,6 @@ else
                             inputProps={{
                             style: { textAlign: "right" },
                             }}
-                            onChange={handleChangePswd}
                         />
                         </Grid>
                         <ColorButton
@@ -448,7 +444,7 @@ else
                             </Link>
                             </Grid>
                             <Grid item>
-                            <Link href="/account/register" variant="body2" className={classes.colorLink}>
+                            <Link href="/register" variant="body2" className={classes.colorLink}>
                                 {"لا تملك حساب؟ أفتح حساب الأن"}
                             </Link>
                             </Grid>
@@ -456,9 +452,6 @@ else
                         </ThemeProvider>
                         </form>
                     </div>
-                    <Box mt={5}>
-                            <Copyrightar/>
-                    </Box>
                 </ContainerR>
                 </div>
             </div>

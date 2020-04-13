@@ -33,39 +33,14 @@ var form={
   phone : null,
   pswd : null,
   cpswd : null,
-  id_reg :null
+  id_reg :null,
+  type : null
 }
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-function Copyright() {
-  const { t } = useTranslation();
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {t('copyright')}{ '© '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Agri Edge
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
-function Copyrightar() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'.'}
-      {new Date().getFullYear()}
-      {' '}
-      <Link color="inherit" href="https://material-ui.com/">
-        AgriEdge
-      </Link>
-      {' © حقوق النشر'}
-    </Typography>
-  );
-}
 const theme = createMuiTheme({
   palette: {
     primary: green,
@@ -122,7 +97,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp(props) {
-  
+  axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
+        if(r.data.data !== "-2")
+            props.history.push("/") 
+    })
   const [open, setOpen] = React.useState(false);
   const {t} = useTranslation();
   const handleClose = (event, reason) => {
@@ -149,10 +127,15 @@ export default function SignUp(props) {
     event.preventDefault();
   };
   const [region, setRegion] = React.useState('');
+  const [type, setType] = React.useState('');
   
   const handleChangeRegion = event => {
     setRegion(event.target.value);
     form.id_reg = event.target.value
+  };
+  const handleChangeType = event => {
+    setType(event.target.value);
+    form.type = event.target.value
   };
   const handleChangePassword =event =>
     {
@@ -213,7 +196,7 @@ export default function SignUp(props) {
         form.name = event.target.value
     };
 const register =()=>{
-if(form.phone && form.name && form.pswd && form.cpswd &&form.id_reg)
+if(form.phone && form.name && form.pswd && form.cpswd &&form.id_reg && form.type)
 {
   var letter = /^[a-zA-Z ]+$/;
   if(form.name.length >= 5 && form.name.length <= 30 && form.name.match(letter))
@@ -236,23 +219,32 @@ if(form.phone && form.name && form.pswd && form.cpswd &&form.id_reg)
         {
           if(form.id_reg === 1 || form.id_reg === 2 || form.id_reg === 3 || form.id_reg === 4 || form.id_reg === 5 || form.id_reg === 6 || form.id_reg === 7 || form.id_reg === 8 || form.id_reg === 9 || form.id_reg === 10 || form.id_reg === 11 || form.id_reg === 12)
           {
-            const data ={name:form.name,phone:form.phone,pswd:form.pswd,region:form.id_reg}
-            axios.post('http://localhost:3001/register',data)
-            .then((r)=>
+            if(form.type == 0 || form.type == 1)
             {
-              if(r.data.status === "success")
+              const data ={name:form.name,phone:form.phone,pswd:form.pswd,region:form.id_reg,type:form.type}
+              axios.post('http://localhost:3001/register',data)
+              .then((r)=>
               {
-                props.history.push({
-                  pathname: '/confirmation',
-                  state: { detail: r.data.data ,phone: form.phone}
-                })
-              }
-              else
-              {
-                mssg = t('login.'+r.data.data)
-                setOpen(true);
-              }
-            })
+                if(r.data.status === "success")
+                {
+                  props.history.push({
+                    pathname: '/confirmation',
+                    state: { detail: r.data.data ,phone: form.phone}
+                  })
+                }
+                else
+                {
+                  mssg = t('login.'+r.data.data)
+                  setOpen(true);
+                }
+              })
+            }
+            else
+            {
+              mssg = t('login.TYPE')
+              setOpen(true);
+            }
+            
           }
           else
           {
@@ -442,9 +434,22 @@ else
                   labelId="demo-simple-select-filled-label"
                   id="demo-simple-select-filled"
                   value={region}
-                  onChange={handleChangeRegion }
+                  onChange={handleChangeRegion}
                 >
                   {data}
+                </Select>
+              </FormControl>
+              <FormControl variant="outlined"  className={classes.formControl}>
+                <InputLabel id="demo-simple-select-filled-label">{t('register.LABEL_TYPE')}*</InputLabel>
+                <Select
+                  label="type*"
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  value={type}
+                  onChange={handleChangeType }
+                >
+                  <MenuItem  value = "1"> {t('register.ACHETEUR')}</MenuItem>
+                  <MenuItem  value = "0"> {t('register.VENDEUR')}</MenuItem>
                 </Select>
               </FormControl>
             </ThemeProvider>
@@ -465,14 +470,13 @@ else
           </Snackbar>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/account/login" variant="body2" className={classes.colorLink}>
+              <Link href="/login" variant="body2" className={classes.colorLink}>
                 {t('register.TO_SIGNIN')}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-        <Copyright />
     </ContainerR>
   );}
   else
@@ -601,6 +605,19 @@ else
                   {data}
                 </Select>
               </FormControl>
+              <FormControl variant="outlined"  className={classes.formControl}>
+                <InputLabel id="demo-simple-select-filled-label">نوع الحساب*</InputLabel>
+                <Select
+                  label="type*"
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  value={type}
+                  onChange={handleChangeType }
+                >
+                  <MenuItem  value = "1"> المشتري</MenuItem>
+                  <MenuItem  value = "0"> البائع</MenuItem>
+                </Select>
+              </FormControl>
             </ThemeProvider>
           </Grid>
           <ColorButton
@@ -619,14 +636,13 @@ else
           </Snackbar>
           <Grid container justify="flex-end">
             <Grid item>
-                <Link href="/account/login" variant="body2" className={classes.colorLink}>
+                <Link href="/login" variant="body2" className={classes.colorLink}>
                  {"أنا عضو بالفعل"}
                 </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Copyrightar />
     </ContainerR>
   );
   }

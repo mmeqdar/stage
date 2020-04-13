@@ -5,9 +5,10 @@ const bcrypt = require('bcrypt');
 const spliceString = require('splice-string');
 const saltRounds = 10;
 const Nexmo = require('nexmo');
+const jwt = require('jsonwebtoken');
 const nexmo = new Nexmo({
-  apiKey: 'f4ffcff3',
-  apiSecret: 'wCkkhwJTqa5MJ1dQ',
+  apiKey: '9e22b6f1',
+  apiSecret: 'GEZ3S1EYtmBGDPoB',
 },{debug:true});
 
 
@@ -30,7 +31,10 @@ class User {
                     {
                         if(r[0].confirmation != 0)
                         {
-                            resolve({status :'success',data :"done"})
+                            console.log(r[0].type)
+                            const token = jwt.sign({ id: r[0].id_user },'mmeqfall')
+                            const type = jwt.sign({ type: r[0].type },'mmeqfall')
+                            resolve({status :'success',data:r[0].type,token:token,type:type})
                         }
                         else
                         {
@@ -315,6 +319,66 @@ forgot1(id,code,phone)
             })
         ))
     }
-   
+    /*--------------------get info-----------*/
+    get_info(id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_INFO,id)
+            .then((r)=>
+            {
+                resolve(r)
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    update(id,name,pswd)
+    {
+        var req
+        if(name && !pswd)
+             req =this.database.query(USERS.UPDATE_NAME,[name,id])
+        if(!name && pswd)
+            {
+                var salt = bcrypt.genSaltSync(saltRounds);
+                var hash_pass = bcrypt.hashSync(pswd, salt);
+                 req =this.database.query(USERS.UPDATE_PSWD_BY_ID,[hash_pass,id])
+            }
+        if(name && pswd)
+            {
+                var salt = bcrypt.genSaltSync(saltRounds);
+                var hash_pass = bcrypt.hashSync(pswd, salt);
+                req =this.database.query(USERS.UPDATE_NAME_PSWD,[name,hash_pass,id])
+            }
+
+            return new Promise((resolve, reject) => ( 
+            req
+            .then(()=>
+            {
+                resolve({status :'success',data :"done"})
+            })
+            .catch((r)=>
+            {
+                console.log(r)
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    update_pic(pic,id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.UPDATE_PROFIL,[pic,id])
+            .then((r)=>
+            {
+                console.log("doneee2")
+                resolve({status :'success',data :"done"})
+            })
+            .catch(()=>
+            {console.log("noonn2")
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
 }
 module.exports = User

@@ -60,8 +60,8 @@ const theme = createMuiTheme({
             props.history.push("/login") 
     })
     axios.post('http://localhost:3001/check_type',{type:localStorage.getItem('type')}).then((r)=>{
-        if(r.data.data == 0)
-            props.history.push("/home1") 
+        if(r.data.data == 1)
+            props.history.push("/") 
     })
     const [data, setData] = useState({ hits: [] });
     //const [datas, setDatas] = useState({ hitss: [] });
@@ -69,7 +69,7 @@ const theme = createMuiTheme({
     
    useEffect(() => {
     const fetchData = async () => {
-        const result = await axios.post('http://localhost:3001/all',{type:0});
+        const result = await axios.post('http://localhost:3001/all',{type:1});
         setData({hits:result.data});
         };
     fetchData();
@@ -168,7 +168,7 @@ const theme = createMuiTheme({
   {
       if(search.reg || search.cat)
       {
-        axios.post("http://localhost:3001/search",{region:search.reg,category:search.cat,type:0})
+        axios.post("http://localhost:3001/search",{region:search.reg,category:search.cat,type:1})
         .then((r)=>{
             //tableau =r.data
             setData({hits:r.data});

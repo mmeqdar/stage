@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/m_user');
+const Token = require('../models/m_token');
+var multer  = require('multer')
 const { ERRORS } = require('../../config/const').RESPONSES;
 
 const login =  router.post('/login', function (req, res) {
-
+    console.log("phone : "+ req.body.phone)
+    console.log("pswd : "+ req.body.pswd)
     if(req.body.phone && req.body.pswd )
         {
             if(req.body.phone.length === 10 && Number.isInteger(parseInt(req.body.phone)))
@@ -27,7 +30,7 @@ const login =  router.post('/login', function (req, res) {
                     {
                         res.send(r)
                     })
-                    .catch((err)=>{
+                    .catch(()=>{
                         resolve({status :'failure',data :"GENERAL"})
                     })
                 }
@@ -281,6 +284,134 @@ const getCatergorie =  router.post('/getCatergorie', function (req, res) {
         res.send({status :'failure',data :"GENERAL"})
     })
 });
+const get_info =  router.post('/get_info', function (req, res) {
+    const user = new User()
+    const token = new Token()
+    token.token(req.body.token).then((r)=>{
+        if(r !== -2)
+        {
+            user.get_info(r)
+            .then((r)=>
+            {
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+const update =  router.post('/update', function (req, res) {
+    const token = new Token()
+    token.token(req.body.token).then((r)=>{
+        if(r !== -2)
+        {
+            if(req.body.name || req.body.pswd )
+                {
+                    if(req.body.name)
+                    {
+                        var letter = /^[a-zA-Z ]+$/;
+                        if(!(req.body.name.length >= 5 && req.body.name.length <= 30 && req.body.name.match(letter)))
+                        {
+                            console.log("NAME")
+                            res.send({status :'failure',data :"NAME"})
+                        }
+                    }
+                    if(req.body.pswd)
+                    {
+                        var n = 0, u = 0,l = 0, Upper = /^[A-Z]+$/, Lower = /^[a-z]+$/, number = /^[0-9]+$/;
+                            for(var i = 0 ;i<req.body.pswd .length;i++)
+                            {
+                            if(req.body.pswd[i].match(Upper))
+                                u = 1
+                            if(req.body.pswd[i].match(Lower))
+                                l = 1
+                            if(req.body.pswd[i].match(number))
+                                n = 1
+                            }
+                            if(!(n != 0 && u != 0 && l != 0 && req.body.pswd.length > 5 && req.body.pswd.length < 20))
+                            {
+                                console.log('pswd')
+                                res.send({status :'failure',data :"PSWD"})
+                            }
+                    }
+                    const user = new User()
+                    user.update (r,req.body.name,req.body.pswd)
+                    .then((r)=>
+                    {
+                        res.send(r)
+                    })
+                    .catch((err)=>{
+                        res.send({status :'failure',data :"GENERAL"})
+                    })
+                }
+                else
+                {
+                    console.log("DATA_MISSING")
+                    res.send({status :'failure',data :"DATA_MISSING"})
+                }
+        }
+        else
+            res.send({status :'failure',data :"GENERAL"})
+        })
+        .catch((err)=>{
+            res.send({status :'failure',data :"GENERAL"})
+        })
+});
+/*---------------update pic -------------*/
+var storage = multer.diskStorage({
+    
+    destination: function(req, file, cb) {
+        cb(null, './src/images');
+    },
+    filename: function(req, file, cb) {
+        cb(null, 'img-profil-' + Date.now()+file.originalname)
+    },
+    
+  });
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+            
+        }
+    },
+    
+});
+const update_pic =  router.post('/update_pic', upload.array('pic',1),async  (req, res)=> {
+    const user = new User()
+    const token = new Token()
+    console.log("doneee11" +req.files[0].filename)
+    token.token(req.body.token).then((r) => {
+        if(r !== -2)
+        {
+            console.log(r)
+            user.update_pic(req.files[0].filename,r)
+            .then((r)=>
+            {
+                res.send(r)
+            })
+            .catch(()=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch(()=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+
 module.exports = login
 module.exports = register
 module.exports = confirmation
@@ -289,3 +420,6 @@ module.exports = forgot1
 module.exports = updatepswd
 module.exports = getRegion
 module.exports = getCatergorie
+module.exports = get_info
+module.exports = update
+module.exports = update_pic

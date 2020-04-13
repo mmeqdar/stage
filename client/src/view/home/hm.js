@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import axios from "axios";
 import { ThemeProvider,createMuiTheme } from '@material-ui/core/styles';
-import {  withStyles} from '@material-ui/core/styles';
+import { makeStyles , withStyles} from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
@@ -19,13 +19,10 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import HighlightOffIcon from '@material-ui/icons/Close';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import Carousel from 'react-bootstrap/Carousel'
-import img_1 from  "../../images/1.jpg"
-import img_2 from  "../../images/2.jpg"
-import img_3 from  "../../images/3.jpg"
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import './home.css';
+import myInitObject from './../../const'
 //var len= 0
 var produit={
     region:null,
@@ -55,6 +52,7 @@ const theme = createMuiTheme({
     },
   });
  export default  function Home(props){
+
     axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
         if(r.data.data == -2)
             props.history.push("/login") 
@@ -79,7 +77,7 @@ const theme = createMuiTheme({
   {
       if(r.data)
       {
-        if(localStorage.getItem('langue')  !== 'ar')
+        if(localStorage.getItem('langue')  == 'en')
         {
           for(var i = 0;i <r.data.length ;i++)
           {
@@ -129,20 +127,7 @@ const theme = createMuiTheme({
             getCategorie[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
           }
         }
-         if(localStorage.getItem('langue')  == 'fr')
-        {
-            for(var i = 0;i <r.data.length ;i++)
-                { 
-                    if(r.data[i].name_categorie === "fruits")
-                        r.data[i].name_categorie = "fruits"
-                    if(r.data[i].name_categorie === "vegetables")
-                        r.data[i].name_categorie = "légumes"
-                    if(r.data[i].name_categorie === "cereal")
-                        r.data[i].name_categorie = "céréale" 
-                    getCategorie[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
-                }
-        }
-        if(localStorage.getItem('langue')  == 'ar')
+        else
         {
           for(var i = 0;i <r.data.length ;i++)
           { if(r.data[i].name_categorie === "fruits")
@@ -221,100 +206,74 @@ const theme = createMuiTheme({
   }
     return(
         <div>
-            <Carousel >
-                <Carousel.Item style={{height: "400px"}} className="car">
-                    <img
-                    className="d-block w-100 h-100"
-                    src={img_1}
-                    alt="First slide"
-                    />
-                    <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>First slide label</h1>
-                    </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item style={{height: "400px"}} className="car">
-                    <img
-                    className="d-block w-100 h-100"
-                    src={img_2}
-                    alt="Third slide"
-                    />
-                    <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>Second slide label</h1>
-                    </Carousel.Caption>
-                </Carousel.Item >
-                <Carousel.Item style={{height: "400px" }} className="car">
-                    <img
-                    className="d-block w-100 h-100"
-                    src={img_3}
-                    alt="Third slide"
-                    />
-                    <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>Third slide label</h1>
-                    </Carousel.Caption>
-                </Carousel.Item>
-            </Carousel>
+            <div className="agri"></div>
             <div className="bar">
-                <NavBar position="static">
-                    <Box display="flex"  style={{padding: "1% 3% 1% 1%" }}>
-                        <ThemeProvider theme={theme}>
-                            <FormControl className="arsearch mt-2 col-1">
-                                <SearchIcon onClick={recherche} fontSize="large" className="icon" />
-                            </FormControl>
-                            <FormControl variant="outlined"  className="formcateg col-5">
-                                <InputLabel id="demo-simple-select-filled-label"> {t('home.CATEGO')}</InputLabel>
-                                <Select
-                                label ={t('home.CATEGO')}
-                                labelId="demo-simple-select-filled-label"
-                                id="demo-simple-select-filled"
-                                onChange={handleChangeCategory}
-                                >
-                                    <MenuItem  disabled> {t('home.CATEGO')}</MenuItem>
-                                    {getCategorie}
-                                </Select>
-                            </FormControl>
-                            <FormControl variant="outlined"  className="formregion col-5">
-                                <InputLabel id="demo-simple-select-filled-label">{t('home.REGION')}</InputLabel>
-                                <Select
-                                label ={t('home.REGION')}
-                                labelId="demo-simple-select-filled-label"
-                                id="demo-simple-select-filled"
-                                onChange={handleChangeRegion}
-                                >
-                                    <MenuItem disabled> {t('home.REGION')}</MenuItem>
-                                    {getRegion}
-                                </Select>
-                            </FormControl>
-                        </ThemeProvider>
-                    </Box>
+            <NavBar position="static">
+            <Box display="flex"  style={{padding: "1% 3% 1% 1%" }}>
+            <ThemeProvider theme={theme}>
+            <FormControl className="arsearch mt-3"><SearchIcon onClick={recherche} fontSize="large" className="icon" /></FormControl>
+            
+              <FormControl variant="outlined"  className="formcateg">
+                    <InputLabel id="demo-simple-select-filled-label"> {t('home.CATEGO')}</InputLabel>
+                    <Select
+                    label ={t('home.CATEGO')}
+                    labelId="demo-simple-select-filled-label"
+                    id="demo-simple-select-filled"
+                    onChange={handleChangeCategory}
+                    >
+                        <MenuItem  disabled> {t('home.CATEGO')}</MenuItem>
+                        {getCategorie}
+                    </Select>
+                </FormControl>
+                <FormControl variant="outlined"  className="formregion">
+                    <InputLabel id="demo-simple-select-filled-label">{t('home.REGION')}</InputLabel>
+                    <Select
+                    label ={t('home.REGION')}
+                    labelId="demo-simple-select-filled-label"
+                    id="demo-simple-select-filled"
+                    onChange={handleChangeRegion}
+                    >
+                        <MenuItem selectedValue> {t('home.REGION')}</MenuItem>
+                        {getRegion}
+                    </Select>
+                </FormControl>
+                
+                </ThemeProvider>
+                </Box>
                 </NavBar>
             </div>
             
-            <Grid container justify="center" className="mt-4">
-                {data.hits && data.hits.map((element,index)=>(
-                    <React.Fragment key={index} >
-                    <Card  className="card" onClick={()=>{info(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}}>
-                    <div className="container">
-                        <img
-                            className="media"
-                            src={`http://localhost:3001/images/${element.name_images}`}
-                        />
-                        <div className="overlay" >
-                            <div >
-                                <Typography className="text">
-                                    {element.quantity} {t('home.KG')}
-                                </Typography>
-                                <Typography className="text1">
-                                {element.prix} {t('home.PRICE')}
-                                </Typography>
+        <Grid container justify="center">
+        {data.hits.length === 0 && <span>Aucune annonce</span>}
+                         {data.hits && data.hits.map((element,index)=>(
+                            <React.Fragment key={index} >
+                            <Card  className="card" onClick={()=>{info(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}}>
+                            <div className="container">
+                                <img
+                                
+                                    className="media"
+                                    //src="http://localhost:3001/images/img-1585432083227test1.jpg"
+                                    src={`http://localhost:3001/images/${element.name_images}`}
+                                />
+                                    <div className="overlay" >
+                                        <div >
+                                            <Typography className="text">
+                                                {element.quantity} {t('home.KG')}
+                                            </Typography>
+                                            <Typography className="text1">
+                                            {element.prix} {t('home.PRICE')}
+                                            </Typography>
+                                        </div>
+                                        <button className="buyButton"> {t('home.BUY')}
+                                        </button>
+                                    </div>
                             </div>
-                            <button className="buyButton"> {t('home.BUY')}</button>
-                        </div>
-                    </div>
-                    </Card></React.Fragment>
-                ))}          
+                            </Card></React.Fragment>
+                        ))}
+                        
             </Grid>
-            {tn.n === true && tableau && <div className="modal  productQuickView show" style={{paddingRight: '16px', display: 'block'}}>
-            <ToastContainer />
+                         {tn.n === true && tableau && <div className="modal  productQuickView show" style={{paddingRight: '16px', display: 'block'}}>
+                <ToastContainer />
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <button type="button" onClick={close} className="close" data-dismiss="modal" aria-label="Close">
@@ -355,6 +314,6 @@ const theme = createMuiTheme({
                     </div>
                 </div>
             </div>}
-        </div>
+            </div>
     )
 }

@@ -1,0 +1,31 @@
+/*.form {
+   margin-top :200px;
+   position: absolute;
+    width: '70%';
+    margin-top: 300px,
+    animation: demande 5s infinite;
+}*/
+/*@keyframes demande {
+    0%   {background-image: url("./../../images/1.jpg");}
+    25% {background-image: url("./../../images/2.png");}
+    50% {background-image: url("./../../images/4.jpg");}
+    75% {background-image: url("./../../images/5.jpg");}
+    100% {background-image: url("./../../images/3.png");}
+  }*/
+  .addd
+  {
+    animation: annonce 10s infinite;
+    animation-direction: alternate;
+  }
+  @keyframes annonce {
+    0%  {margin-left:-10%;}
+    100% {margin-left:20%;}
+  }
+  .divform
+  {
+   animation: dmd 3s;
+  }
+  @keyframes dmd {
+    0%  {margin-left:-200%;}
+    100%  {margin-left:0%;}
+  }

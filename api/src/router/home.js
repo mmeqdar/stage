@@ -5,7 +5,7 @@ const { ERRORS } = require('../../config/const').RESPONSES;
 
 const search =  router.post('/search', function (req, res) {
     const home = new Home()
-    home.search(req.body.region,req.body.category)
+    home.search(req.body.region,req.body.category,req.body.type)
     .then((r)=>
     {
         console.table(r)
@@ -17,7 +17,7 @@ const search =  router.post('/search', function (req, res) {
 });
 const all =  router.post('/all', function (req, res) {
     const home = new Home()
-    home.all()
+    home.all(req.body.type)
     .then((r)=>
     {
         res.send(r)

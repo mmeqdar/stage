@@ -10,16 +10,16 @@ class User {
         this.database = new Database();
     }
     /*---------------------search------------------*/
-    search(reg,cat)
+    search(reg,cat,type)
     {
         console.log(reg,cat)
         var req=null
         if(reg != null && cat == null)
-            req = this.database.query(USERS.GET_BY_REG,reg)
+            req = this.database.query(USERS.GET_BY_REG,[reg,type])
         if(reg == null && cat != null)
-            req = this.database.query(USERS.GET_BY_CAT,cat)
+            req = this.database.query(USERS.GET_BY_CAT,[cat,type])
         if(reg != null && cat != null)
-            req = this.database.query(USERS.GET_BY_CAT_REG,[reg,cat])
+            req = this.database.query(USERS.GET_BY_CAT_REG,[reg,cat,type])
         return new Promise((resolve, reject) => ( 
             req.then((r)=>
             {
@@ -32,10 +32,11 @@ class User {
         ))
     }
     /*---------------------all------------------*/
-    all()
+    all(type)
     {
+        console.log("tet")
         return new Promise((resolve, reject) => ( 
-            this.database.query(USERS.GET_ALL).then((r)=>
+            this.database.query(USERS.GET_ALL,type).then((r)=>
             {
                 console.log(r)
                     resolve(r); 
@@ -49,7 +50,6 @@ class User {
     }
     get_ann(id)
     {
-        console.log("22222")
         return new Promise((resolve, reject) => ( 
             this.database.query(USERS.GET_ANN,id).then((r)=>
             {

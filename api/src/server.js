@@ -18,7 +18,16 @@ const search = require('./router/home.js')
 const all = require('./router/home.js')
 const get_ann = require('./router/home.js')
 const annonce = require('./router/annonce.js')
+const demande = require('./router/annonce.js')
 const getCat= require('./router/annonce.js')
+const check_token = require('./router/token.js')
+const check_type = require('./router/token.js')
+const get_info = require('./router/user.js')
+const update = require('./router/user.js')
+const update_pic = require('./router/user.js')
+const editAnnonce = require('./router/annonce.js')
+const get_myAnn= require('./router/annonce.js')
+const deleteAnnonce= require('./router/annonce.js')
 //const passport = require('passport')
 const port = process.env.PORT || 3001
 
@@ -48,7 +57,17 @@ class Server{
         this.app.post('/all', all);
         this.app.post('/get_ann', get_ann);
         this.app.post('/annonce', annonce);
-        this.app.post('/getCat', getCat)
+        this.app.post('/demande', demande);
+        this.app.post('/getCat', getCat);
+        this.app.post('/check_token', check_token);
+        this.app.post('/check_type', check_type);
+        this.app.post('/get_info', get_info);
+        this.app.post('/update', update);
+        this.app.post('/update_pic', update_pic);
+        this.app.post('/get_myAnn', get_myAnn);
+        this.app.post('/editAnnonce', editAnnonce);
+        this.app.post('/deleteAnnonce', deleteAnnonce);
+        
      }
       listen() {
             this.http.listen(port, ()=> {
