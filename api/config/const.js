@@ -13,7 +13,8 @@ const RESPONSES = {
     REGION:"Wrong Region",
     QUANTITY_WRONG:"Quantity is wrong",
     PRIX_WRONG:"Price is wrong",
-    DES_WRONG:"Description must contain less than 200"
+    DES_WRONG:"Description must contain less than 200",
+    CART:"READY INSERT"
     
   },
 }
@@ -28,9 +29,9 @@ const REQ = {
     GET_BY_PSWD:
      'SELECT count(*) as cnt from user WHERE password = ?',
      GET_BY_NEXMO_PHONE:
-     'SELECT count(*) as cnt from user WHERE nexmo = ? AND phone = ?',
-     ADD_USER:
-     'INSERT INTO `user`(`fullName`, `phone`, `password`,`id_region`) values (?, ?, ?,?)',
+     'SELECT count(*) as cnt from user WHERE nexmo = ? AND phone = ?',      
+    ADD_USER:
+    'INSERT INTO `user`(`fullName`, `phone`, `password`,`id_region`,`type`, `lat`, `lng`) values (?,?,?,?,?,?,?)',
      UPDATE_NEXMO:
      'UPDATE `user` SET nexmo=? WHERE phone = ?',
      GET_VER:
@@ -46,13 +47,13 @@ const REQ = {
     GET_CATEGOY:
     'SELECT * FROM `categorie`',
     GET_BY_REG:
-    'SELECT  i.name_images,a.*,r.name_region,c.name_categorie,u.phone  FROM images i,annonces a,user u, regions r, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user and r.id_region = u.id_region and r.id_region = ? and c.id_categorie = a.id_categorie and a.type_annonce = ?',
+    'SELECT  i.name_images,a.*,r.name_region,c.name_categorie,u.phone FROM images i,annonces a,user u, regions r, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user and r.id_region = u.id_region and r.id_region = ? and c.id_categorie = a.id_categorie and a.type_annonce = ?',
     GET_BY_CAT:
     'SELECT i.name_images,a.*,c.name_categorie,r.name_region,u.phone FROM images i,annonces a, categorie c , user u, regions r WHERE i.id_annonce = a.id_annonce and i.i = 0 and c.id_categorie = a.id_categorie and c.id_categorie = ? and a.id_user =u.id_user and u.id_region = r.id_region and a.type_annonce = ?',
     GET_BY_CAT_REG:
     'SELECT i.name_images,a.*,r.name_region,c.name_categorie,u.phone FROM images i,annonces a,user u, regions r, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user and r.id_region = u.id_region and r.id_region = ? and a.id_categorie = ? and c.id_categorie = a.id_categorie and a.type_annonce = ?',
     GET_ALL:
-    'SELECT i.name_images,a.*,r.name_region,c.name_categorie,u.phone FROM images i,annonces a,user u, regions r, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user  and r.id_region = u.id_region  and c.id_categorie = a.id_categorie and a.type_annonce = ?',
+    'SELECT i.name_images,a.*,r.name_region,c.name_categorie,u.phone,u.lat,u.lng  FROM images i,annonces a,user u, regions r, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user  and r.id_region = u.id_region  and c.id_categorie = a.id_categorie and a.type_annonce = ?',
     GET_ANN:
     'SELECT name_images FROM images WHERE  id_annonce = ?',
     ADD_IMAGE:
@@ -62,7 +63,7 @@ const REQ = {
     GET_IMAGE:
     "SELECT `name_images` FROM `images` WHERE `id_annonce` =? and i = 0",
     GET_INFO:
-    "SELECT `fullName`,`phone`,`profil` FROM `user` WHERE `id_user`= ? ",
+    "SELECT `fullName`,`phone`,`profil`,`lat`,`lng` FROM `user` WHERE `id_user`= ? ",
     UPDATE_NAME:
     'UPDATE `user` SET `fullName`=? WHERE id_user = ?',
     UPDATE_PSWD_BY_ID:
@@ -76,7 +77,19 @@ const REQ = {
     DELETE_ANN:
     "DELETE FROM `annonces` WHERE `id_annonce` = ? and `id_user` = ?",
     UPDATE_PROFIL:
-    "UPDATE `user` SET `profil`=? WHERE `id_user` = ?"
+    "UPDATE `user` SET `profil`=? WHERE `id_user` = ?",
+    GET_ALL_USR:
+    'SELECT `id_user`,lat,lng FROM user WHERE type = ?',
+    GET_ANN_NFO:
+    'SELECT i.name_images,a.*,r.name_region,c.name_categorie,u.phone  FROM images i,annonces a,user u, regions r, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user  and r.id_region = u.id_region  and c.id_categorie = a.id_categorie and a.id_user = ?',
+    COUNT_CART:
+    "SELECT count(*) as cnt FROM `Cart` WHERE`id_user`= ? and `id_annonce` = ?",
+    INSERT_CART:
+    "INSERT INTO `Cart`(`id_user`, `id_annonce`) VALUES (?,?)",
+    GET_CART:
+    "SELECT a.*,i.name_images FROM Cart c,annonces a ,images i WHERE a.id_annonce = c.id_annonce and i.id_annonce = a.id_annonce and c.id_user = ?",
+    Get_MY_DEM:
+    "SELECT i.name_images, a.*, u.fullName,s.fullName as acheteur FROM images i,annonces a,user u,user s, Cart c WHERE i.id_annonce = c.id_annonce and u.id_user = a.id_user and c.id_annonce = a.id_annonce and u.id_user = ? and s.id_user = c.id_user"
     }
 }
 module.exports = {

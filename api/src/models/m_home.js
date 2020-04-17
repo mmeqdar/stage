@@ -61,6 +61,33 @@ class User {
             })
         ))
     }
-    
+    all_user(type)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_ALL_USR,type).then((r)=>
+            {
+                console.log(r)
+                    resolve(r); 
+                
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    get_all_ann(id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_ANN_NFO,id).then((r)=>
+            {
+                resolve(r)
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
 }
 module.exports = User

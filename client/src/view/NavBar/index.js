@@ -11,7 +11,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 // import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import TranslateOutlinedIcon from '@material-ui/icons/GTranslate';
-// import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
@@ -35,6 +35,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import {useDropzone} from 'react-dropzone';
+import PlaceIcon from '@material-ui/icons/Place';
 import './index.css';
 
 var to 
@@ -524,7 +525,6 @@ export default function PrimarySearchAppBar(props) {
             <HomeOutlinedIcon /> <Box fontWeight="fontWeightBold" >{t('nav.HOME')}</Box>
           </MenuItem>
         </NavLink>}
-
        {user === "-2" && <NavLink  to="/login" className={classes.btn} activeClassName={classes.navbarLinkActive}>
        <MenuItem  >{t('nav.LOGIN')}</MenuItem>
         </NavLink>}
@@ -533,11 +533,21 @@ export default function PrimarySearchAppBar(props) {
         <MenuItem  >{t('nav.REGISTER')}</MenuItem>
          </NavLink>
         }
-
+          
+        {user !== "-2" && <NavLink exact to="/map" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+          <MenuItem >
+            <Box fontWeight="fontWeightBold" ><PlaceIcon/></Box>
+          </MenuItem>
+        </NavLink>}
         {user !== "-2" &&  <NavLink    to={to} className={classes.btn} activeClassName={classes.navbarLinkActive}>
           <MenuItem>
             {/* <ShoppingCartOutlinedIcon />  */}
             <Box fontWeight="fontWeightBold" >{t('nav.CART')}</Box>
+          </MenuItem>
+        </NavLink>}
+        {user !== "-2" && to == '/demande' && <NavLink    to="/cart" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+          <MenuItem>
+            <Box fontWeight="fontWeightBold" ><ShoppingCartOutlinedIcon /> </Box>
           </MenuItem>
         </NavLink>}
         <MenuItem className={classes.btn} onClick={handleLanguageMenuOpen}>
@@ -588,6 +598,10 @@ export default function PrimarySearchAppBar(props) {
                 <MenuItem  >{t('nav.REGISTER')}</MenuItem>
                 </NavLink>
                 }
+                {user !== "-2" && <NavLink exact to="/map" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+          <MenuItem ><Box fontWeight="fontWeightBold" ><PlaceIcon/></Box>
+          </MenuItem>
+        </NavLink>}
               {user !== "-2" && <NavLink   to={to} className={classes.btn} activeClassName={classes.navbarLinkActive}>
                 <MenuItem
                   edge="end"
@@ -597,6 +611,11 @@ export default function PrimarySearchAppBar(props) {
                   <Box fontWeight="fontWeightBold" >{t('nav.CART')}</Box>
                 </MenuItem>
               </NavLink>}
+              {user !== "-2" && to == '/demande' && <NavLink    to="/cart" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+              <MenuItem>
+                <Box fontWeight="fontWeightBold" ><ShoppingCartOutlinedIcon /> </Box>
+              </MenuItem>
+            </NavLink>}
               <NavLink  to="#">
                 <MenuItem
                   edge="end"
@@ -795,14 +814,22 @@ export default function PrimarySearchAppBar(props) {
         {user === "-2" && <NavLink to="/register" className={classes.btn} activeClassName={classes.navbarLinkActive}>
         <MenuItem  >أفتح حساب</MenuItem>
         </NavLink>}
-
+        {user !== "-2" && <NavLink exact to="/map" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+          <MenuItem >
+            <Box fontWeight="fontWeightBold" ><PlaceIcon/></Box>
+          </MenuItem>
+        </NavLink>}
         {user !== "-2" &&   <NavLink    to={to} className={classes.btn} activeClassName={classes.navbarLinkActive}>
           <MenuItem>
           {/* <ShoppingCartOutlinedIcon /> */}
              <Box fontWeight="fontWeightBold" >إعلان</Box>
           </MenuItem>
         </NavLink>}
-
+        {user !== "-2" && to == '/demande' &&  <NavLink    to="/cart" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+          <MenuItem>
+            <Box fontWeight="fontWeightBold" ><ShoppingCartOutlinedIcon /> </Box>
+          </MenuItem>
+        </NavLink>}
         <MenuItem className={classes.btn} onClick={handleLanguageMenuOpen}>
           <TranslateOutlinedIcon /> <Box fontWeight="fontWeightBold">اللغة</Box><ArrowDropDownOutlinedIcon />
         </MenuItem>
@@ -842,7 +869,7 @@ export default function PrimarySearchAppBar(props) {
                     autoFocus
                     fullWidth
                     id="fullName"
-                    label="الاسم الكامل"
+                    label="اسم التعاونية"
                     placeholder={form1.name}
                     name="fullName"
                     autoComplete="fname"
@@ -858,7 +885,7 @@ export default function PrimarySearchAppBar(props) {
                       required
                       fullWidth
                       id="phone"
-                      label="رقم الهاتف"
+                      label="رقم هاتف التعاونية"
                       value={form1.phone}
                       name="phone"
                       autoComplete="phone"
@@ -985,6 +1012,11 @@ export default function PrimarySearchAppBar(props) {
                   < ArrowDropDownOutlinedIcon/> <Box fontWeight="fontWeightBold">اللغة</Box>< TranslateOutlinedIcon/>
                 </MenuItem>
               </NavLink>
+              {user !== "-2" && to == '/demande' &&  <NavLink    to="/cart" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+                <MenuItem>
+                  <Box fontWeight="fontWeightBold" ><ShoppingCartOutlinedIcon /> </Box>
+                </MenuItem>
+              </NavLink>}
               {user !== "-2" &&   <NavLink  to={to} className={classes.btn} activeClassName={classes.navbarLinkActive}>
                 <MenuItem
                   edge="end"
@@ -995,6 +1027,11 @@ export default function PrimarySearchAppBar(props) {
                   {/* <ShoppingCartOutlinedIcon /> */}
                 </MenuItem>
               </NavLink>}
+              {user !== "-2" && <NavLink exact to="/map" className={classes.btn} activeClassName={classes.navbarLinkActive}>
+          <MenuItem >
+            <Box fontWeight="fontWeightBold" ><PlaceIcon/></Box>
+          </MenuItem>
+        </NavLink>}
               {user === "-2" && <NavLink to="/login" className={classes.btn} activeClassName={classes.navbarLinkActive}>
                 <MenuItem  >تسجيل الدخول</MenuItem>
               </NavLink>}
@@ -1047,7 +1084,7 @@ export default function PrimarySearchAppBar(props) {
                     autoFocus
                     fullWidth
                     id="fullName"
-                    label="الاسم الكامل"
+                    label="اسم التعاونية"
                     placeholder={form1.name}
                     name="fullName"
                     autoComplete="fname"
@@ -1063,7 +1100,7 @@ export default function PrimarySearchAppBar(props) {
                       required
                       fullWidth
                       id="phone"
-                      label="رقم الهاتف"
+                      label="رقم هاتف التعاونية"
                       value={form1.phone}
                       name="phone"
                       autoComplete="phone"

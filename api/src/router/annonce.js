@@ -240,9 +240,33 @@ const deleteAnnonce =  router.post('/deleteAnnonce', function (req, res) {
         res.send({status :'failure',data :"GENERAL"})
     })
 });
+const get_demande =  router.post('/get_demande', function (req, res) {
+    const annonce = new Annonce()
+    const token = new Token()
+    token.token(req.body.token).then((r) => {
+        if(r !== -2)
+        {
+            annonce.get_demande(r)
+            .then((r)=>
+            {
+                console.table(r)
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+            res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
 module.exports = annonce
 module.exports = demande
 module.exports = getCat
 module.exports = get_myAnn
 module.exports = editAnnonce
 module.exports = deleteAnnonce
+module.exports = get_demande

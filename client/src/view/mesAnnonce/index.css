@@ -123,13 +123,24 @@
 .imgs
 {
 height: 60%;
+width: 50%;
 }
 .imgs img{
   height: 100%;
-  width: 100%;
+  width: 50%;
 }
 .vl {
   border-left: 1px solid green;
   height: 400px;
+}
+.imginfo
+{
+  height: 10px;
+  width: 50%;
+}
+.tdimginfo
+{
+  height: 100px;
+  width: 50%;
 }
 

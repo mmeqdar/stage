@@ -217,32 +217,33 @@ export default function Annonce(props) {
                     data[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
                 }
             }
-            else 
-            if(localStorage.getItem('langue')  === 'ar')
+            if(localStorage.getItem('langue')  == 'fr')
             {
                 for(var i = 0;i <r.data.length ;i++)
                 { 
-                    if(r.data[i].name_categorie === "fruits")
-                        r.data[i].name_categorie = "فاكهة"
-                    if(r.data[i].name_categorie === "vegetables")
-                        r.data[i].name_categorie = "خضروات"
-                    if(r.data[i].name_categorie === "cereal")
-                        r.data[i].name_categorie = "حبوب" 
-                      data[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
+                    if(r.data[i].name_categorie === "Pottery")
+                        r.data[i].name_categorie = "Poterie"
+                    if(r.data[i].name_categorie === "Spices")
+                        r.data[i].name_categorie = "Épices"
+                    if(r.data[i].name_categorie === "Textile")
+                        r.data[i].name_categorie = "Textile"
+                    if(r.data[i].name_categorie === "Sewing and Embroidery")
+                    r.data[i].name_categorie = "Couture et Broderie" 
+                    data[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
                 }
             }
-            else
+            if(localStorage.getItem('langue')  == 'ar')
             {
-                
                 for(var i = 0;i <r.data.length ;i++)
-                { 
-                    if(r.data[i].name_categorie === "fruits")
-                        r.data[i].name_categorie = "des fruits"
-                    if(r.data[i].name_categorie === "vegetables")
-                        r.data[i].name_categorie = "des légumes"
-                    if(r.data[i].name_categorie === "cereal")
-                        r.data[i].name_categorie = "céréale" 
-                      data[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
+                { if(r.data[i].name_categorie === "Pottery")
+                        r.data[i].name_categorie ="الفخار"
+                    if(r.data[i].name_categorie === "Spices")
+                        r.data[i].name_categorie = "التوابل"
+                    if(r.data[i].name_categorie === "Textile")
+                        r.data[i].name_categorie = "النسيج"
+                    if(r.data[i].name_categorie === "Sewing and Embroidery")
+                        r.data[i].name_categorie = "الخياطة والتطريز"
+                        data[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
                 }
             }
         }
@@ -335,7 +336,7 @@ export default function Annonce(props) {
                       label={t('annonce.QUANTITY')}
                       autoComplete="quantity"
                       InputProps={{
-                        endAdornment: <InputAdornment position="end">KG</InputAdornment>,
+                        endAdornment: <InputAdornment position="end"></InputAdornment>,
                       }}
                       inputProps={{
                         style: { textAlign: align },

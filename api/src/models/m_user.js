@@ -59,9 +59,9 @@ class User {
         ))
     }
     /*----------------------register-----------------*/
-    register(name,phone,pswd,region)
+    register(name,phone,pswd,region,type,lat,lng)
     {
-        console.log(phone)
+        console.log(type+" "+lat+" "+lng)
         return new Promise((resolve, reject) => ( 
             this.database.query(USERS.GET_BY_PHONE,phone)
             .then((r)=>
@@ -76,7 +76,7 @@ class User {
                     var salt = bcrypt.genSaltSync(saltRounds);
                     var hash_pass = bcrypt.hashSync(pswd, salt);
                     
-                    this.database.query(USERS.ADD_USER,[name,phone,hash_pass,region])
+                    this.database.query(USERS.ADD_USER,[name,phone,hash_pass,region,type,lat,lng])
                     .then((r)=>{
                         console.table(r)
                         if(r.err)
@@ -376,6 +376,49 @@ forgot1(id,code,phone)
             })
             .catch(()=>
             {console.log("noonn2")
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    add_cart(id_user,id_annonce)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.COUNT_CART,[id_user,id_annonce])
+            .then((r)=>
+            {
+                if(r[0].cnt == 0)
+                {
+                    this.database.query(USERS.INSERT_CART,[id_user,id_annonce])
+                    .then((r)=>
+                    {
+                        console.log("done")
+                        resolve({status :'success',data :"done"})
+                    })
+                    .catch(()=>
+                    {
+                        console.log("erreeuuuuurr")
+                        resolve({status :'failure',data :"GENERAL"})
+                    })
+                }
+                else
+                {
+                    console.log("deja")
+                    resolve({status :'failure',data :"CART"})
+                }
+            })
+        ))
+    }
+    get_cart(id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_CART,id)
+            .then((r)=>
+            {
+                console.log(r)
+                resolve(r)
+            })
+            .catch(()=>
+            {
                 resolve({status :'failure',data :"GENERAL"})
             })
         ))

@@ -24,12 +24,12 @@
         "OPEN":"Create a Account",
         "edit":"Edit",
         "update":"update successful",
-        "MY_AD":"My ads"
+        "MY_AD":"Requests"
     },
     "register": 
     {  
-        "LABEL_NAME":"Full Name",
-        "LABEL_PHONE":"Phone Number",
+        "LABEL_NAME":"Cooperative Name",
+        "LABEL_PHONE":"Cooperative Phone Number",
         "LABEL_PASS":"Password",
         "LABEL_CPASS":"Confirmation Password",
         "LABEL_REG":"Region",
@@ -45,7 +45,7 @@
     {
         "PRICE":"DH",
         "BUY":"Buy",
-        "KG":"KG",
+        "KG":"",
         "WELCOME":"welcome",
         "CATEGO":"Categories",
         "REGION":"Regions",
@@ -53,7 +53,23 @@
         "QUAN":"Amount",
         "PHO":"Phone",
         "CAT":"Category",
-        "ADD":" Add to Cart"
+        "ADD":" Add to Cart",
+        "CART":"already added",
+        "Product":"Product",
+        "Total":"Total",
+        "Shipping":"Shipping",
+        "subtotal":"Subtotal",
+        "CartTotals":"Cart Totals",
+        "ContinueShopping":"Continue Shopping",
+        "delivery":"Pay on delivery",
+        "credit":"PPay by credit card",
+        "H1":"Dedicated to Moroccan Producers",
+        "H2":"Traditional industry directly from the manufacturer",
+        "H3":"Easy to use",
+        "demandes":"Requests",
+        "action":"Action",
+        "accepter":"Accept",
+        "refuse":"Refuse"
     },
     "nav":
     {

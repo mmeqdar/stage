@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 //const config = require('config')
 //const nodeMailer = require("nodemailer")
 const register = require('./router/user.js')
+const local = require('./router/user.js')
 const login = require('./router/user.js')
 const confirmation = require('./router/user.js')
 const forgot = require('./router/user.js')
@@ -28,6 +29,11 @@ const update_pic = require('./router/user.js')
 const editAnnonce = require('./router/annonce.js')
 const get_myAnn= require('./router/annonce.js')
 const deleteAnnonce= require('./router/annonce.js')
+const all_user = require('./router/home.js')
+const get_all_ann = require('./router/home.js')
+const add_cart = require('./router/user.js')
+const get_cart = require('./router/user.js')
+const get_demande= require('./router/annonce.js')
 //const passport = require('passport')
 const port = process.env.PORT || 3001
 
@@ -46,6 +52,7 @@ class Server{
         this.http = http.Server(this.app)
 
         this.app.post('/register', register);
+        this.app.post('/local', local);
         this.app.post('/login', login);
         this.app.post('/confirmation', confirmation);
         this.app.post('/forgot', forgot);
@@ -67,6 +74,11 @@ class Server{
         this.app.post('/get_myAnn', get_myAnn);
         this.app.post('/editAnnonce', editAnnonce);
         this.app.post('/deleteAnnonce', deleteAnnonce);
+        this.app.post('/all_user', all_user);
+        this.app.post('/get_all_ann', get_all_ann);
+        this.app.post('/add_cart', add_cart);
+        this.app.post('/get_cart', get_cart);
+        this.app.post('/get_demande', get_demande);
         
      }
       listen() {

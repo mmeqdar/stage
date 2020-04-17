@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from "axios";
+import {withGoogleMap, withScriptjs, GoogleMap, Marker} from "react-google-maps";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,16 +26,52 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useTranslation } from 'react-i18next';
+import './index.css';
+// import mapStyles from "./mapStyles";
 
 var mssg = null
+var lat = null
+var lng = null
+var la = null
+var lg = null
 var data = []
+
 var form={
   name : null,
   phone : null,
   pswd : null,
   cpswd : null,
-  id_reg :null,
   type : null
+}
+
+function  Map() {
+  function clickMap(e) {
+    la = e.latLng.lat(); 
+    lg = e.latLng.lng();
+    alert(la + " , " + lg);  
+  }
+  if(la !== null && lg !== null)
+  {
+    return (
+      <GoogleMap
+        defaultZoom={12}
+        defaultCenter={{ lat: la, lng: lg}}
+        onClick={clickMap}
+      >
+        <Marker
+          position={{
+            lat: la,
+            lng: lg
+          }}
+        />
+      </GoogleMap>
+    )
+  }
+  else
+  {
+    return(<p>-------</p> )
+    
+  }
 }
 
 function Alert(props) {
@@ -85,6 +122,7 @@ const useStyles = makeStyles(theme => ({
   },
   colorLink: {
     color : grey[800],
+    marginBottom : "30px",
     '&:hover': {
       color : green[700],
     },
@@ -95,8 +133,14 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   }
 }));
-
+const MapWrapped = withScriptjs(withGoogleMap(Map));
 export default function SignUp(props) {
+  axios.post('http://localhost:3001/local').then((r)=>{
+      la = Number(r.data[0])
+      lg = Number(r.data[1])
+      console.log("lllaaattt : "+la+" lllnnngg : "+lg)
+      console.log("cccc") 
+  })
   axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
         if(r.data.data !== "-2")
             props.history.push("/") 
@@ -126,13 +170,13 @@ export default function SignUp(props) {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-  const [region, setRegion] = React.useState('');
+  // const [region, setRegion] = React.useState('');
   const [type, setType] = React.useState('');
   
-  const handleChangeRegion = event => {
-    setRegion(event.target.value);
-    form.id_reg = event.target.value
-  };
+  // const handleChangeRegion = event => {
+  //   setRegion(event.target.value);
+  //   form.id_reg = event.target.value
+  // };
   const handleChangeType = event => {
     setType(event.target.value);
     form.type = event.target.value
@@ -196,7 +240,8 @@ export default function SignUp(props) {
         form.name = event.target.value
     };
 const register =()=>{
-if(form.phone && form.name && form.pswd && form.cpswd &&form.id_reg && form.type)
+  form.id_reg = 6
+if(form.phone && form.name && form.pswd && form.cpswd && form.type)
 {
   var letter = /^[a-zA-Z ]+$/;
   if(form.name.length >= 5 && form.name.length <= 30 && form.name.match(letter))
@@ -217,11 +262,9 @@ if(form.phone && form.name && form.pswd && form.cpswd &&form.id_reg && form.type
       {
         if(form.pswd === form.cpswd)
         {
-          if(form.id_reg === 1 || form.id_reg === 2 || form.id_reg === 3 || form.id_reg === 4 || form.id_reg === 5 || form.id_reg === 6 || form.id_reg === 7 || form.id_reg === 8 || form.id_reg === 9 || form.id_reg === 10 || form.id_reg === 11 || form.id_reg === 12)
-          {
             if(form.type == 0 || form.type == 1)
             {
-              const data ={name:form.name,phone:form.phone,pswd:form.pswd,region:form.id_reg,type:form.type}
+              const data ={name:form.name,phone:form.phone,pswd:form.pswd,region:form.id_reg,type:form.type,lat:lat,lng:lng}
               axios.post('http://localhost:3001/register',data)
               .then((r)=>
               {
@@ -244,13 +287,6 @@ if(form.phone && form.name && form.pswd && form.cpswd &&form.id_reg && form.type
               mssg = t('login.TYPE')
               setOpen(true);
             }
-            
-          }
-          else
-          {
-            mssg = t('login.REGION')
-            setOpen(true);
-          }
         }
         else
         {
@@ -284,49 +320,7 @@ else
   setOpen(true);
 }
 };
-  axios.post('http://localhost:3001/getRegion').then((r)=>
-  {
-      if(r.data)
-      {
-        if(localStorage.getItem('langue')  !== 'ar')
-        {
-          for(var i = 0;i <r.data.length ;i++)
-          {
-            data[i] = <MenuItem  key = {i} value = {r.data[i].id_region}> {r.data[i].name_region}</MenuItem>
-          }
-        }
-        else
-        {
-          for(var i = 0;i <r.data.length ;i++)
-          { if(r.data[i].name_region === "Tanger-Tétouan-Al Hoceïma")
-                r.data[i].name_region = "طنجة-تطوان-الحسيمة"
-            if(r.data[i].name_region === "l'Oriental")
-                r.data[i].name_region = "الشرق"
-            if(r.data[i].name_region === "Fès-Meknès")
-                r.data[i].name_region = "فاس-مكناس"
-            if(r.data[i].name_region === "Rabat-Salé-Kénitra")
-                r.data[i].name_region = " الرباط-سلا-القنيطرة"
-            if(r.data[i].name_region === "Béni Mellal-Khénifra")
-                r.data[i].name_region = " بني ملال-خنيفرة"
-            if(r.data[i].name_region === "Casablanca-Settat")
-                r.data[i].name_region = "الدار البيضاء-سطات"
-            if(r.data[i].name_region === "Marrakech-Safi")
-                r.data[i].name_region = "مراكش-آسفي"
-            if(r.data[i].name_region === "Drâa-Tafilalet")
-                r.data[i].name_region = "درعة-تافيلالت"
-            if(r.data[i].name_region === "Souss-Massa")
-                r.data[i].name_region = "سوس-ماسة"
-            if(r.data[i].name_region === "Guelmim-Oued Noun")
-                r.data[i].name_region = "كلميم-واد نون"
-            if(r.data[i].name_region === "Laâyoune-Sakia El Hamra")
-                r.data[i].name_region = " العيون-الساقية الحمراء" 
-            if(r.data[i].name_region === "Dakhla-Oued Ed Dahab")
-                r.data[i].name_region = "الداخلة-وادي الذهب"
-            data[i] = <MenuItem  key = {i} value = {r.data[i].id_region}> {r.data[i].name_region}</MenuItem>
-          }
-        }
-      }
-  }) 
+
  if(localStorage.getItem('langue') !== 'ar') {
    return (
       <ContainerR  maxWidth="xs"  component={Paper} elevation={5}> 
@@ -372,7 +366,7 @@ else
                   onChange={handleChangePhone}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   variant="outlined"
                   required
@@ -398,7 +392,7 @@ else
                   onChange={handleChangePassword}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   variant="outlined"
                   required
@@ -428,21 +422,9 @@ else
                 />
               </Grid>
               <FormControl variant="outlined"  className={classes.formControl}>
-                <InputLabel id="demo-simple-select-filled-label">{t('register.LABEL_REG')}*</InputLabel>
-                <Select
-                  label="region*"
-                  labelId="demo-simple-select-filled-label"
-                  id="demo-simple-select-filled"
-                  value={region}
-                  onChange={handleChangeRegion}
-                >
-                  {data}
-                </Select>
-              </FormControl>
-              <FormControl variant="outlined"  className={classes.formControl}>
                 <InputLabel id="demo-simple-select-filled-label">{t('register.LABEL_TYPE')}*</InputLabel>
                 <Select
-                  label="type*"
+                  label={t('register.LABEL_TYPE')}
                   labelId="demo-simple-select-filled-label"
                   id="demo-simple-select-filled"
                   value={type}
@@ -451,6 +433,13 @@ else
                   <MenuItem  value = "1"> {t('register.ACHETEUR')}</MenuItem>
                   <MenuItem  value = "0"> {t('register.VENDEUR')}</MenuItem>
                 </Select>
+                <div className="map1">
+                  <MapWrapped googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyAPmEexK0qohaFbERtXwsykYnjKhrcuATk`}
+                    loadingElement={<div style={{ height: `100%` }} />}
+                    containerElement={<div style={{ height: `100%` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                  />
+                </div>
               </FormControl>
             </ThemeProvider>
           </Grid>
@@ -502,7 +491,7 @@ else
                     required
                     fullWidth
                     id="fullName"
-                    label="الاسم الكامل"
+                    label="اسم التعاونية"
                     name="fullName"
                     autoComplete="fname"
                     onChange={handleChangeName}
@@ -520,7 +509,7 @@ else
                   required
                   fullWidth
                   id="phone"
-                  label="رقم الهاتف"
+                  label="رقم هاتف التعاونية"
                   name="phone"
                   autoComplete="phone"
                   InputProps={{
@@ -532,36 +521,7 @@ else
                   onChange={handleChangePhone}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  value={values.Password}
-                  label="كلمة السر"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  type={values.showPassword ? 'text' : 'password'}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>,
-                  }}
-                  inputProps={{
-                    style: { textAlign: "right" },
-                  }}
-                  onChange={handleChangePassword}
-                />
-              </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   variant="outlined"
                   required
@@ -593,22 +553,39 @@ else
                   }}
                 />
               </Grid>
-              <FormControl variant="outlined"  className={classes.formControl}>
-                <InputLabel id="demo-simple-select-filled-label">الجهة*</InputLabel>
-                <Select
-                  label="الجهة"
-                  labelId="demo-simple-select-filled-label"
-                  id="demo-simple-select-filled"
-                  value={region}
-                  onChange={handleChangeRegion }
-                >
-                  {data}
-                </Select>
-              </FormControl>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  value={values.Password}
+                  label="كلمة السر"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  type={values.showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>,
+                  }}
+                  inputProps={{
+                    style: { textAlign: "right" },
+                  }}
+                  onChange={handleChangePassword}
+                />
+              </Grid>
               <FormControl variant="outlined"  className={classes.formControl}>
                 <InputLabel id="demo-simple-select-filled-label">نوع الحساب*</InputLabel>
                 <Select
-                  label="type*"
+                  label="الحساب نوع"
                   labelId="demo-simple-select-filled-label"
                   id="demo-simple-select-filled"
                   value={type}
@@ -617,6 +594,13 @@ else
                   <MenuItem  value = "1"> المشتري</MenuItem>
                   <MenuItem  value = "0"> البائع</MenuItem>
                 </Select>
+                <div className="map1">
+                  <MapWrapped googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyAPmEexK0qohaFbERtXwsykYnjKhrcuATk`}
+                    loadingElement={<div style={{ height: `100%` }} />}
+                    containerElement={<div style={{ height: `100%` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                  />
+                </div>
               </FormControl>
             </ThemeProvider>
           </Grid>

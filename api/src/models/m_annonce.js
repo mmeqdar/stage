@@ -98,5 +98,19 @@ class Annonce {
             })
         ))
     }
+    get_demande(id)
+    {
+        console.log("------------------"+id+"-----------")
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.Get_MY_DEM,id).then((r)=>
+            {
+                resolve(r)
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
 }
 module.exports = Annonce

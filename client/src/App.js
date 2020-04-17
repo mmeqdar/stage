@@ -15,7 +15,9 @@ import { NotFoundRoute } from 'react-router';
 import {Route,  BrowserRouter } from 'react-router-dom';
 import Demande from "./view/demande";
 import Footer from "./view/footer/";
-import MesAnnonce from "./view/mesAnnonce/";
+import MesAnnonce from "./view/mesAnnonce/me";
+import Map from "./view/map/";
+import Cart from "./view/cart/";
 import Axios from 'axios';
 
 //const  createBrowserHistory = require("history/createBrowserHistory")
@@ -38,6 +40,8 @@ function App() {
             <Route exact path="/home1" component={home1} />
             <Route exact path="/demande" component={Demande} />
             <Route exact path="/mesAnnonce" component={MesAnnonce} />
+            <Route exact path="/map" component={Map} />
+            <Route exact path="/cart" component={Cart} />
             <Footer />
             </BrowserRouter>
       </div>

@@ -38,6 +38,31 @@ const get_ann =  router.post('/get_ann', function (req, res) {
         res.send({status :'failure',data :"GENERAL"})
     })
 });
+const all_user =  router.post('/all_user', function (req, res) {
+    const home = new Home()
+    home.all_user(req.body.type)
+    .then((r)=>
+    {
+        res.send(r)
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+const get_all_ann =  router.post('/get_all_ann', function (req, res) {
+    const home = new Home()
+    home.get_all_ann(req.body.id)
+    .then((r)=>
+    {
+        console.table(r)
+        res.send(r)
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
 module.exports = search;
 module.exports = all;
-module.exports=get_ann;
+module.exports = get_ann;
+module.exports = all_user;
+module.exports = get_all_ann;

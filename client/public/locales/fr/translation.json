@@ -24,12 +24,12 @@
         "OPEN":"Créez un compte",
         "edit":"Modifier",
         "update":"Mise à jour réussie",
-        "MY_AD":"Mes annonces"
+        "MY_AD":"Demandes"
     },
     "register": 
     {  
-        "LABEL_NAME":"Nom Complet",
-        "LABEL_PHONE":"Numéro De Téléphone",
+        "LABEL_NAME":"Nom de la Coopérative",
+        "LABEL_PHONE":"Téléphone de la Coopérative",
         "LABEL_PASS":"Mot De Passe",
         "LABEL_CPASS":"Confirmation Mot De Passe",
         "LABEL_REG":"Région",
@@ -53,7 +53,7 @@
     {
         "PRICE":"DH",
         "BUY":"Acheter",
-        "KG":"KG",
+        "KG":"",
         "WELCOME":"Bienvenue",
         "CATEGO":"Catégories",
         "REGION":"Régions",
@@ -61,7 +61,23 @@
         "QUAN":"Quantité",
         "PHO":"Téléphone",
         "CAT":"Catégorie",
-        "ADD":"Ajouter au chariot"
+        "ADD":"Ajouter au chariot",
+        "CART":"déjà ajouté",
+        "Product":"Produit",
+        "Total":"Total",
+        "Shipping":"Livraison",
+        "subtotal":"Sous-total",
+        "CartTotals":"Totaux du panier",
+        "ContinueShopping":"Continuer vos achats",
+        "delivery":"Payer à la livraison",
+        "credit":"Paiement par carte de crédit",
+        "H1":"Dédié au Producteurs Marocains",
+        "H2":"Industrie traditionnelle directement du fabricant",
+        "H3":"Facile à utiliser",
+        "demandes":"Demandes",
+        "action":"Action",
+        "accepter":"Accepter",
+        "refuse":"Refuser"
     },
     "annonce":
     {

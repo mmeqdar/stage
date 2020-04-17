@@ -20,9 +20,9 @@ import HighlightOffIcon from '@material-ui/icons/Close';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import Carousel from 'react-bootstrap/Carousel'
-import img_1 from  "../../images/1.jpg"
-import img_2 from  "../../images/2.jpg"
-import img_3 from  "../../images/3.jpg"
+import img_1 from  "../../images/catal.png"
+import img_2 from  "../../images/pottery.jpg"
+import img_3 from  "../../images/Spices.jpg"
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import './home.css';
@@ -34,7 +34,8 @@ var produit={
     prix:null,
     phone:null,
     descri : null,
-    len:0
+    len:0,
+    id:null
 }
 const NavBar = withStyles(theme => ({
     root: {
@@ -70,6 +71,34 @@ const theme = createMuiTheme({
    useEffect(() => {
     const fetchData = async () => {
         const result = await axios.post('http://localhost:3001/all',{type:0});
+        if(localStorage.getItem('langue')  == 'ar')
+        {
+          for(var i = 0;i <result.data.length ;i++)
+              { 
+              if(result.data[i].name_categorie === "Pottery")
+              result.data[i].name_categorie ="الفخار"
+                    if(result.data[i].name_categorie === "Spices")
+                    result.data[i].name_categorie = "التوابل"
+                    if(result.data[i].name_categorie === "Textile")
+                    result.data[i].name_categorie = "النسيج"
+                    if(result.data[i].name_categorie === "Sewing and Embroidery")
+                    result.data[i].name_categorie = "الخياطة والتطريز"
+              }
+        }
+        if(localStorage.getItem('langue')  == 'fr')
+        {
+            for(var i = 0;i <result.data.length ;i++)
+                { 
+                    if(result.data[i].name_categorie === "Pottery")
+                    result.data[i].name_categorie = "Poterie"
+                    if(result.data[i].name_categorie === "Spices")
+                    result.data[i].name_categorie = "Épices"
+                    if(result.data[i].name_categorie === "Textile")
+                    result.data[i].name_categorie = "Textile"
+                    if(result.data[i].name_categorie === "Sewing and Embroidery")
+                    result.data[i].name_categorie = "Couture et Broderie" 
+                }
+          }
         setData({hits:result.data});
         };
     fetchData();
@@ -129,28 +158,32 @@ const theme = createMuiTheme({
             getCategorie[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
           }
         }
-         if(localStorage.getItem('langue')  == 'fr')
+        if(localStorage.getItem('langue')  == 'fr')
         {
             for(var i = 0;i <r.data.length ;i++)
                 { 
-                    if(r.data[i].name_categorie === "fruits")
-                        r.data[i].name_categorie = "fruits"
-                    if(r.data[i].name_categorie === "vegetables")
-                        r.data[i].name_categorie = "légumes"
-                    if(r.data[i].name_categorie === "cereal")
-                        r.data[i].name_categorie = "céréale" 
+                    if(r.data[i].name_categorie === "Pottery")
+                        r.data[i].name_categorie = "Poterie"
+                    if(r.data[i].name_categorie === "Spices")
+                        r.data[i].name_categorie = "Épices"
+                    if(r.data[i].name_categorie === "Textile")
+                        r.data[i].name_categorie = "Textile"
+                    if(r.data[i].name_categorie === "Sewing and Embroidery")
+                    r.data[i].name_categorie = "Couture et Broderie" 
                     getCategorie[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
                 }
         }
         if(localStorage.getItem('langue')  == 'ar')
         {
           for(var i = 0;i <r.data.length ;i++)
-          { if(r.data[i].name_categorie === "fruits")
-                r.data[i].name_categorie ="الفاكهة"
-            if(r.data[i].name_categorie === "vegetables")
-                r.data[i].name_categorie = "الخضروات"
-            if(r.data[i].name_categorie === "cereal")
-                r.data[i].name_categorie = "الحبوب"
+          { if(r.data[i].name_categorie === "Pottery")
+                r.data[i].name_categorie ="الفخار"
+            if(r.data[i].name_categorie === "Spices")
+                r.data[i].name_categorie = "التوابل"
+            if(r.data[i].name_categorie === "Textile")
+                r.data[i].name_categorie = "النسيج"
+            if(r.data[i].name_categorie === "Sewing and Embroidery")
+                r.data[i].name_categorie = "الخياطة والتطريز"
                 getCategorie[i] = <MenuItem  key = {i} value = {r.data[i].id_categorie}> {r.data[i].name_categorie}</MenuItem>
           }
         }
@@ -175,6 +208,13 @@ const theme = createMuiTheme({
         })
       }
   }
+  const handleAddToCartFromView = ()=>
+  {
+    axios.post('http://localhost:3001/add_cart',{token:localStorage.getItem('token'),id:produit.id})
+    .then(()=>{
+
+    })
+  };
   const info=(id,q,p,r,c,ph,d)=>
   {
     produit.len = 0
@@ -183,7 +223,8 @@ const theme = createMuiTheme({
     produit.quan = q;
     produit.prix = p;
     produit.phone = ph;
-    produit.descri = d
+    produit.descri = d;
+    produit.id = id
     axios.post("http://localhost:3001/get_ann",{id:id})
     .then((r)=>{
          tableau =r.data
@@ -228,9 +269,9 @@ const theme = createMuiTheme({
                     src={img_1}
                     alt="First slide"
                     />
-                    <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>First slide label</h1>
-                    </Carousel.Caption>
+                    {/* <Carousel.Caption>
+                        <h1 style={{fontSize: "600%"}}>{t('home.H1')}</h1>
+                    </Carousel.Caption> */}
                 </Carousel.Item>
                 <Carousel.Item style={{height: "400px"}} className="car">
                     <img
@@ -239,7 +280,7 @@ const theme = createMuiTheme({
                     alt="Third slide"
                     />
                     <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>Second slide label</h1>
+                        <h1 style={{fontSize: "600%"}}>{t('home.H1')}</h1>
                     </Carousel.Caption>
                 </Carousel.Item >
                 <Carousel.Item style={{height: "400px" }} className="car">
@@ -249,7 +290,7 @@ const theme = createMuiTheme({
                     alt="Third slide"
                     />
                     <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>Third slide label</h1>
+                        <h1 style={{fontSize: "500%"}}>{t('home.H2')}</h1>
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
@@ -344,7 +385,7 @@ const theme = createMuiTheme({
                                         <button 
                                             type="submit" 
                                             className="btn btn-primary"
-                                            //onClick={this.handleAddToCartFromView}
+                                            onClick={handleAddToCartFromView}
                                         >
                                             <ShoppingCartIcon/> {t('home.ADD')}
                                         </button>

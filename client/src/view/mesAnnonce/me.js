@@ -118,7 +118,7 @@ const useStyles = makeStyles(theme => ({
     const [tn, setDatan] = useState({ n: false ,len:null});
     
     const fetchData = async () => {
-      const result = await axios.post('http://localhost:3001/get_myAnn',{token:localStorage.getItem('token')});
+      const result = await axios.post('http://localhost:3001/get_demande',{token:localStorage.getItem('token')});
       setData({hits:result.data});
     };
    useEffect(() => {
@@ -284,26 +284,44 @@ const useStyles = makeStyles(theme => ({
   return(
     <div>
         <Grid container justify="center" className="mt-4">
+        <table className="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">{t('home.Product')}</th>
+                                            <th scope="col">{t('home.PRIX')}</th>
+                                            <th scope="col">{t('home.QUAN')}</th>
+                                            <th scope="col">{t('home.demandes')}</th>
+                                            <th scope="col">{t('home.action')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
             {data.hits && data.hits.map((element,index)=>(
-                <React.Fragment key={index} >
-                <Card  className="card">
-                    <div className="container">
-                        <img className="imginfo" src={`http://localhost:3001/images/${element.name_images}`} />
-                        <div className="overlay" >
-                            <div >
-                                <DeleteIcon className="deletButton" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) del(element.id_annonce)}}/>
-                                <Typography className="text">
-                                    {element.quantity} {t('home.KG')}
-                                </Typography>
-                                <Typography className="text1">
-                                    {element.prix} {t('home.PRICE')}
-                                </Typography>
-                            </div>
-                            <button className="buyButton " onClick={()=>{info(element.id_annonce,element.quantity,element.prix,element.name_categorie,element.description)}}>{t('annonce.B')}</button>
-                        </div>
-                    </div>
-                </Card></React.Fragment>
-            ))}          
+                <tr key={index}>
+                <td className="mr-0" onClick={()=>{info(element.id_annonce,element.quantity,element.prix,element.name_categorie,element.description)}} className="product-thumbnail">
+                            <img classNmae={classes.pic} src={`http://localhost:3001/images/${element.name_images}`} alt="item" />
+                </td>
+
+                <td className="product-price">
+                    <span className="unit-amount">{element.prix} {t('home.PRICE')}</span>
+                </td>
+
+                <td className="product-quantity">
+                    <span className="unit-amount">{element.quantity} {t('home.KG')}</span>
+                    
+                </td>
+
+                <td className="product-subtotal">
+                 <span className="subtotal-amount">{element.acheteur} </span>   
+                </td>
+                <td className="product-subtotal">
+                  <button className="btn btn-danger">{t('home.refuse')} </button>
+                  <button className="btn btn-success ml-4">{t('home.accepter')}</button>
+                    
+                </td>
+            </tr>
+            ))} 
+            </tbody>
+                                </table>         
         </Grid>
         {tn.n === true && tableau && <div className="modal  productQuickView show" style={{paddingRight: '16px', display: 'block'}}>
         <ToastContainer />

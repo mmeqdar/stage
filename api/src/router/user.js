@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/m_user');
 const Token = require('../models/m_token');
-var multer  = require('multer')
+var multer  = require('multer');
+const isEmpty  = require('../utils/isEmpty')
+const ipInfo = require("ipinfo");
 const { ERRORS } = require('../../config/const').RESPONSES;
 
 const login =  router.post('/login', function (req, res) {
@@ -52,13 +54,21 @@ const login =  router.post('/login', function (req, res) {
             res.send({status :'failure',data :"DATA_MISSING"})
         }
 });
-
+/*---------------ipinfo---------*/
+const local = router.post('/local' , function(req, res) {
+    ipInfo((err, cLoc) => {
+        const test = cLoc.loc;
+        const t = test.split(',');
+        console.log(t)
+        res.send(t)
+        console.table(t)
+    })
+})
 const register =  router.post('/register', function (req, res) {
-    //const user = new User()
-    console.log("name : "+ req.body.name)
-    console.log("phone : "+ req.body.phone)
-    console.log("pswd : "+ req.body.pswd)
-    console.log("region :"+ req.body.region)
+    console.log("1) llaaattt : "+req.body.type)
+    var lat = req.body.lat
+    var lng = req.body.lng
+
     if(req.body.phone && req.body.name && req.body.pswd )
         {
             var letter = /^[a-zA-Z ]+$/;
@@ -81,15 +91,39 @@ const register =  router.post('/register', function (req, res) {
                         if(req.body.region === 1 || req.body.region === 2 || req.body.region === 3 || req.body.region === 4 || req.body.region === 5 || req.body.region === 6 || req.body.region === 7 || req.body.region === 8 || req.body.region === 9 || req.body.region === 10 || req.body.region === 11 || req.body.region === 12)
                         {
                             const user = new User()
-                            user.register(req.body.name,req.body.phone,req.body.pswd,req.body.region)
-                            .then((r)=>
+                            if(isEmpty(lat) && isEmpty(lng))
                             {
-                                console.log(r)
-                                res.send(r)
-                            })
-                            .catch((err)=>{
-                                resolve({status :'failure',data :"GENERAL"})
-                            })
+                                console.log("emptyy")
+                                ipInfo((err, cLoc) => {
+                                    console.log()
+                                    const test = cLoc.loc;
+                                    const t = test.split(',');
+                                    lat = t[0]
+                                    lng = t[1]
+                                    console.log("1) llaaattt : "+lat+" , llnnngg : "+lng)
+                                    user.register(req.body.name,req.body.phone,req.body.pswd,req.body.region,req.body.type,lat,lng)
+                                    .then((r)=>
+                                    {
+                                        console.log(r)
+                                        res.send(r)
+                                    })
+                                    .catch((err)=>{
+                                        resolve({status :'failure',data :"GENERAL"})
+                                    })
+                                })
+                            }
+                            else
+                            {
+                                user.register(req.body.name,req.body.phone,req.body.pswd,req.body.region,req.body.type,lat,lng)
+                                .then((r)=>
+                                {
+                                    console.log(r)
+                                    res.send(r)
+                                })
+                                .catch((err)=>{
+                                    resolve({status :'failure',data :"GENERAL"})
+                                })
+                            }
                         }
                         else
                         {
@@ -411,7 +445,50 @@ const update_pic =  router.post('/update_pic', upload.array('pic',1),async  (req
         res.send({status :'failure',data :"GENERAL"})
     })
 });
-
+const add_cart =  router.post('/add_cart', function (req, res) {
+    const user = new User()
+    const token = new Token()
+    token.token(req.body.token).then((r)=>{
+        if(r !== -2)
+        {
+            user.add_cart(r,req.body.id)
+            .then((r)=>
+            {
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+const get_cart =  router.post('/get_cart', function (req, res) {
+    const user = new User()
+    const token = new Token()
+    token.token(req.body.token).then((r)=>{
+        if(r !== -2)
+        {
+            user.get_cart(r)
+            .then((r)=>
+            {
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
 module.exports = login
 module.exports = register
 module.exports = confirmation
@@ -423,3 +500,6 @@ module.exports = getCatergorie
 module.exports = get_info
 module.exports = update
 module.exports = update_pic
+module.exports = local
+module.exports = add_cart
+module.exports = get_cart
