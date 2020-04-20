@@ -34,6 +34,10 @@ const get_all_ann = require('./router/home.js')
 const add_cart = require('./router/user.js')
 const get_cart = require('./router/user.js')
 const get_demande= require('./router/annonce.js')
+const add_local = require('./router/user.js')
+const get_local = require('./router/user.js')
+const get_all_ann_CF = require('./router/home.js')
+const get_coop = require('./router/user.js')
 //const passport = require('passport')
 const port = process.env.PORT || 3001
 
@@ -79,6 +83,10 @@ class Server{
         this.app.post('/add_cart', add_cart);
         this.app.post('/get_cart', get_cart);
         this.app.post('/get_demande', get_demande);
+        this.app.post('/add_local', add_local);
+        this.app.post('/get_local', get_local);
+        this.app.post('/get_all_ann_CF', get_all_ann_CF);
+        this.app.post('/get_coop', get_coop);
         
      }
       listen() {

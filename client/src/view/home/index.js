@@ -19,16 +19,16 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import HighlightOffIcon from '@material-ui/icons/Close';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import Carousel from 'react-bootstrap/Carousel'
-import img_1 from  "../../images/catal.png"
-import img_2 from  "../../images/pottery.jpg"
-import img_3 from  "../../images/Spices.jpg"
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import './home.css';
 //var len= 0
+var quan_acheter =0;
 var produit={
-    region:null,
     quan:null,
     cat:null,
     prix:null,
@@ -36,6 +36,11 @@ var produit={
     descri : null,
     len:0,
     id:null
+}
+var status = 'error'
+var msg = null
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 const NavBar = withStyles(theme => ({
     root: {
@@ -45,10 +50,11 @@ const NavBar = withStyles(theme => ({
   }))(AppBar);
 var tableau=[];
 
-var getRegion =[], getCategorie=[];
+
+var getCategorie=[];
+
 var search={
-    cat:null,
-    reg:null
+    cat:null
 }
 const theme = createMuiTheme({
     palette: {
@@ -60,17 +66,15 @@ const theme = createMuiTheme({
         if(r.data.data == -2)
             props.history.push("/login") 
     })
-    axios.post('http://localhost:3001/check_type',{type:localStorage.getItem('type')}).then((r)=>{
-        if(r.data.data == 0)
-            props.history.push("/home1") 
-    })
+    if(!props || !props.location || !props.location.state || !props.location.state.id_user )
+        props.history.push('/map_ven')
     const [data, setData] = useState({ hits: [] });
-    //const [datas, setDatas] = useState({ hitss: [] });
     const [tn, setDatan] = useState({ n: false ,len:null});
     
    useEffect(() => {
     const fetchData = async () => {
-        const result = await axios.post('http://localhost:3001/all',{type:0});
+      if(props && props.location && props.location.state && props.location.state.id_user )
+        {const result = await axios.post('http://localhost:3001/get_myAnn',{id:props.location.state.id_user});
         if(localStorage.getItem('langue')  == 'ar')
         {
           for(var i = 0;i <result.data.length ;i++)
@@ -99,54 +103,23 @@ const theme = createMuiTheme({
                     result.data[i].name_categorie = "Couture et Broderie" 
                 }
           }
-        setData({hits:result.data});
+        setData({hits:result.data});}
         };
     fetchData();
   }, []);
+  const [open, setOpen] = React.useState(false);
   const { t } = useTranslation();
-  axios.post('http://localhost:3001/getRegion').then((r)=>
-  {
-      if(r.data)
-      {
-        if(localStorage.getItem('langue')  !== 'ar')
-        {
-          for(var i = 0;i <r.data.length ;i++)
-          {
-            getRegion[i] = <MenuItem  key = {i} value = {r.data[i].id_region}> {r.data[i].name_region}</MenuItem>
-          }
-        }
-        else
-        {
-          for(var i = 0;i <r.data.length ;i++)
-          { if(r.data[i].name_region === "Tanger-Tétouan-Al Hoceïma")
-                r.data[i].name_region = "طنجة-تطوان-الحسيمة"
-            if(r.data[i].name_region === "l'Oriental")
-                r.data[i].name_region = "الشرق"
-            if(r.data[i].name_region === "Fès-Meknès")
-                r.data[i].name_region = "فاس-مكناس"
-            if(r.data[i].name_region === "Rabat-Salé-Kénitra")
-                r.data[i].name_region = " الرباط-سلا-القنيطرة"
-            if(r.data[i].name_region === "Béni Mellal-Khénifra")
-                r.data[i].name_region = " بني ملال-خنيفرة"
-            if(r.data[i].name_region === "Casablanca-Settat")
-                r.data[i].name_region = "الدار البيضاء-سطات"
-            if(r.data[i].name_region === "Marrakech-Safi")
-                r.data[i].name_region = "مراكش-آسفي"
-            if(r.data[i].name_region === "Drâa-Tafilalet")
-                r.data[i].name_region = "درعة-تافيلالت"
-            if(r.data[i].name_region === "Souss-Massa")
-                r.data[i].name_region = "سوس-ماسة"
-            if(r.data[i].name_region === "Guelmim-Oued Noun")
-                r.data[i].name_region = "كلميم-واد نون"
-            if(r.data[i].name_region === "Laâyoune-Sakia El Hamra")
-                r.data[i].name_region = " العيون-الساقية الحمراء" 
-            if(r.data[i].name_region === "Dakhla-Oued Ed Dahab")
-                r.data[i].name_region = "الداخلة-وادي الذهب"
-                getRegion[i] = <MenuItem  key = {i} value = {r.data[i].id_region}> {r.data[i].name_region}</MenuItem>
-          }
-        }
-      }
-  });
+  const handleChangeQuantity = event =>
+  { 
+    quan_acheter = event.target.value
+  };
+const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   axios.post('http://localhost:3001/getCatergorie').then((r)=>
   {
       if(r.data)
@@ -193,15 +166,12 @@ const theme = createMuiTheme({
   {
     search.cat = event.target.value
   }
-  const handleChangeRegion =(event)=>
-  {
-    search.reg = event.target.value
-  }
+
   const recherche = ()=>
   {
-      if(search.reg || search.cat)
+      if(search.cat)
       {
-        axios.post("http://localhost:3001/search",{region:search.reg,category:search.cat,type:0})
+        axios.post("http://localhost:3001/search",{category:search.cat,id:props.location.state.id_user})
         .then((r)=>{
             //tableau =r.data
             setData({hits:r.data});
@@ -210,15 +180,44 @@ const theme = createMuiTheme({
   }
   const handleAddToCartFromView = ()=>
   {
-    axios.post('http://localhost:3001/add_cart',{token:localStorage.getItem('token'),id:produit.id})
-    .then(()=>{
+    if(quan_acheter == 0)
+      {
+        msg =  t('annonce.ERR_QUANTITY')
+        status = 'error'
+         setOpen(true);
+      }
+  else 
+    { 
+      if(quan_acheter > produit.quan)
+      {
+        msg =  t('annonce.indispo')
+        status = 'error'
+         setOpen(true);
+      }
+      else
+      {
+        axios.post('http://localhost:3001/add_cart',{token:localStorage.getItem('token'),id:produit.id,quantite:quan_acheter})
+        .then((r)=>{
+          if(r.data.status === "success")
+          {
+              msg = t('home.done')
+              status = 'success'
+              setOpen(true);
+          }
+          else
+          {
+              msg =  t('home.'+r.data.data)
+              status = 'error'
+              setOpen(true);
 
-    })
+          }
+        })
+      }
+    }
   };
-  const info=(id,q,p,r,c,ph,d)=>
+  const info=(id,q,p,c,ph,d)=>
   {
     produit.len = 0
-    produit.region = r;
     produit.cat = c;
     produit.quan = q;
     produit.prix = p;
@@ -228,9 +227,7 @@ const theme = createMuiTheme({
     axios.post("http://localhost:3001/get_ann",{id:id})
     .then((r)=>{
          tableau =r.data
-         //len = tableau.length
          console.log(produit.len)
-         //len = tableau.lenght;
         if(tn.n === false)
          setDatan({n:true});
         else
@@ -262,38 +259,6 @@ const theme = createMuiTheme({
   }
     return(
         <div>
-            <Carousel >
-                <Carousel.Item style={{height: "400px"}} className="car">
-                    <img
-                    className="d-block w-100 h-100"
-                    src={img_1}
-                    alt="First slide"
-                    />
-                    {/* <Carousel.Caption>
-                        <h1 style={{fontSize: "600%"}}>{t('home.H1')}</h1>
-                    </Carousel.Caption> */}
-                </Carousel.Item>
-                <Carousel.Item style={{height: "400px"}} className="car">
-                    <img
-                    className="d-block w-100 h-100"
-                    src={img_2}
-                    alt="Third slide"
-                    />
-                    <Carousel.Caption>
-                        <h1 style={{fontSize: "600%"}}>{t('home.H1')}</h1>
-                    </Carousel.Caption>
-                </Carousel.Item >
-                <Carousel.Item style={{height: "400px" }} className="car">
-                    <img
-                    className="d-block w-100 h-100"
-                    src={img_3}
-                    alt="Third slide"
-                    />
-                    <Carousel.Caption>
-                        <h1 style={{fontSize: "500%"}}>{t('home.H2')}</h1>
-                    </Carousel.Caption>
-                </Carousel.Item>
-            </Carousel>
             <div className="bar">
                 <NavBar position="static">
                     <Box display="flex"  style={{padding: "1% 3% 1% 1%" }}>
@@ -313,18 +278,6 @@ const theme = createMuiTheme({
                                     {getCategorie}
                                 </Select>
                             </FormControl>
-                            <FormControl variant="outlined"  className="formregion col-5">
-                                <InputLabel id="demo-simple-select-filled-label">{t('home.REGION')}</InputLabel>
-                                <Select
-                                label ={t('home.REGION')}
-                                labelId="demo-simple-select-filled-label"
-                                id="demo-simple-select-filled"
-                                onChange={handleChangeRegion}
-                                >
-                                    <MenuItem disabled> {t('home.REGION')}</MenuItem>
-                                    {getRegion}
-                                </Select>
-                            </FormControl>
                         </ThemeProvider>
                     </Box>
                 </NavBar>
@@ -333,7 +286,7 @@ const theme = createMuiTheme({
             <Grid container justify="center" className="mt-4">
                 {data.hits && data.hits.map((element,index)=>(
                     <React.Fragment key={index} >
-                    <Card  className="card" onClick={()=>{info(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}}>
+                    <Card  className="card" onClick={()=>{info(element.id_annonce,element.quantity,element.prix,element.name_categorie,element.phone,element.description)}}>
                     <div className="container">
                         <img
                             className="media"
@@ -381,15 +334,38 @@ const theme = createMuiTheme({
                                         <li><span>{t('home.CAT')}:</span>{produit.cat}</li>
                                         <li><span>{t('home.PHO')}:</span>0{produit.phone}</li>
                                     </ul>
-                                    <div className="product-add-to-cart mt-5">
+                                    <div className="row product-add-to-cart mt-5">
+                                    <Grid item xs={5} className="col">
+                                  <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    onChange={handleChangeQuantity}
+                                    type="number"
+                                    id="quantity"
+                                    label={t('annonce.QUANTITY')}
+                                    autoComplete="quantity"
+                                    InputProps={{
+                                      endAdornment: <InputAdornment position="end"></InputAdornment>,
+                                    }}
+                                   /* inputProps={{
+                                      style: { textAlign: align },
+                                    }}*/
+                                  />
+                              </Grid>
                                         <button 
-                                            type="submit" 
-                                            className="btn btn-primary"
+                                            className="btn btn-primary col mt-2"
                                             onClick={handleAddToCartFromView}
                                         >
                                             <ShoppingCartIcon/> {t('home.ADD')}
                                         </button>
+                                        
                                     </div>
+                                    <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                                        <Alert onClose={handleClose}  severity={status}>
+                                          {msg}
+                                        </Alert>
+                                    </Snackbar>
                                 </div>
                             </div>
                         </div>

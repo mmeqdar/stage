@@ -8,8 +8,7 @@ const useStyles = makeStyles(theme => ({
   typo: {
     color: grey[900],
     height: "50px",
-    paddingTop: "5px",
-    marginTop: "40px"
+    paddingTop: "10px",
     
   },
   sp: {

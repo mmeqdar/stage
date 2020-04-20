@@ -5,7 +5,7 @@ const { ERRORS } = require('../../config/const').RESPONSES;
 
 const search =  router.post('/search', function (req, res) {
     const home = new Home()
-    home.search(req.body.region,req.body.category,req.body.type)
+    home.search(req.body.category,req.body.id)
     .then((r)=>
     {
         console.table(r)
@@ -40,7 +40,7 @@ const get_ann =  router.post('/get_ann', function (req, res) {
 });
 const all_user =  router.post('/all_user', function (req, res) {
     const home = new Home()
-    home.all_user(req.body.type)
+    home.all_user()
     .then((r)=>
     {
         res.send(r)
@@ -61,8 +61,21 @@ const get_all_ann =  router.post('/get_all_ann', function (req, res) {
         res.send({status :'failure',data :"GENERAL"})
     })
 });
+const get_all_ann_CF =  router.post('/get_all_ann_CF', function (req, res) {
+    const home = new Home()
+    home.get_all_ann_CF(req.body.id)
+    .then((r)=>
+    {
+        console.table(r)
+        res.send(r)
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
 module.exports = search;
 module.exports = all;
 module.exports = get_ann;
 module.exports = all_user;
 module.exports = get_all_ann;
+module.exports = get_all_ann_CF;

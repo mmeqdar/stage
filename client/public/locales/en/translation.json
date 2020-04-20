@@ -63,13 +63,17 @@
         "ContinueShopping":"Continue Shopping",
         "delivery":"Pay on delivery",
         "credit":"PPay by credit card",
+        "PSP":"Pay on the spot",
         "H1":"Dedicated to Moroccan Producers",
         "H2":"Traditional industry directly from the manufacturer",
         "H3":"Easy to use",
         "demandes":"Requests",
         "action":"Action",
         "accepter":"Accept",
-        "refuse":"Refuse"
+        "refuse":"Refuse",
+        "done":"Added successfully",
+        "ADD_LOC":"Are you sure you want to add this localisation:",
+        "DEL_PRO":"Are you sure you wish to delete this item?"
     },
     "nav":
     {
@@ -100,6 +104,7 @@
         "GENERAL":"An error occured. Please try Again later !!",
         "DATA_MISSING": "One or more arguments are missing !!",
         "BUTTN":"Edit your ad",
-        "B":"Edit"
+        "B":"Edit",
+        "indispo":"The quantity is not available"
     }
 }

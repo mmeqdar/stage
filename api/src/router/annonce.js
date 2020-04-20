@@ -58,7 +58,7 @@ const annonce = router.post('/annonce', upload.array('pic',6),async (req, res) =
             }
             else
             {
-                annonce.annonce(req.body.desc, req.body.quantity, req.body.prix, req.body.category,r,type_annonce)
+                annonce.annonce(req.body.desc, req.body.quantity, req.body.prix, req.body.category,r,type_annonce,req.body.id_cf)
                 .then((r)=>
                 {
                     id_annonce = r.insertId 
@@ -167,27 +167,17 @@ const getCat =  router.post('/getCat', function (req, res) {
 //-------------------Get_Annonce-------------------
 const get_myAnn =  router.post('/get_myAnn', function (req, res) {
     const annonce = new Annonce()
-    const token = new Token()
-    token.token(req.body.token).then((r) => {
-        if(r !== -2)
-        {
-            annonce.get_myAnn(r)
-            .then((r)=>
-            {
-                console.table(r)
-                res.send(r)
-            })
-            .catch((err)=>{
-                res.send({status :'failure',data :"GENERAL"})
-            })
-        }
-        else
-            res.send({status :'failure',data :"GENERAL"})
+    annonce.get_myAnn(req.body.id)
+    .then((r)=>
+    {
+        console.table(r)
+        res.send(r)
     })
     .catch((err)=>{
         res.send({status :'failure',data :"GENERAL"})
     })
 });
+
 //-------------------Update_Annonce-------------------
 const editAnnonce =  router.post('/editAnnonce', function (req, res) {
     const annonce = new Annonce()

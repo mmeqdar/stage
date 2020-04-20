@@ -16,8 +16,9 @@ import {Route,  BrowserRouter } from 'react-router-dom';
 import Demande from "./view/demande";
 import Footer from "./view/footer/";
 import MesAnnonce from "./view/mesAnnonce/me";
-import Map from "./view/map/";
-import Cart from "./view/cart/";
+import Map from "./view/map_ach/";
+import MapV from "./view/map_vendeur/";
+import Cart from "./view/cart/cart";
 import Axios from 'axios';
 
 //const  createBrowserHistory = require("history/createBrowserHistory")
@@ -41,6 +42,7 @@ function App() {
             <Route exact path="/demande" component={Demande} />
             <Route exact path="/mesAnnonce" component={MesAnnonce} />
             <Route exact path="/map" component={Map} />
+            <Route exact path="/map_ven" component={MapV} />
             <Route exact path="/cart" component={Cart} />
             <Footer />
             </BrowserRouter>

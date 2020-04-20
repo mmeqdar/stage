@@ -8,7 +8,7 @@ if(localStorage.getItem('langue') === 'en' || localStorage.getItem('langue') ===
   var  fallbackLng = localStorage.getItem('langue');
 else
 {
-  var fallbackLng = ['en'];
+  var fallbackLng = ['ar'];
 }
 const availableLanguages = ['en', 'ar','fr'];
 

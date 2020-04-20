@@ -25,31 +25,7 @@ var form={
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Agri Edge
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-function Copyrightar() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'.'}
-      {new Date().getFullYear()}
-      {' '}
-      <Link color="inherit" href="https://material-ui.com/">
-        AgriEdge
-      </Link>
-      {' © حقوق النشر'}
-    </Typography>
-  );
-}
+
 const theme = createMuiTheme({
   palette: {
     primary: green,
@@ -106,7 +82,7 @@ export default function SignUp(props) {
     props.history.push('/login')
   axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
         if(r.data.data !== "-2")
-            props.history.push("/") 
+            props.history.push("/map") 
     })
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -121,22 +97,28 @@ export default function SignUp(props) {
   
   const send =()=>{
     const data ={id:props.location.state.detail,code:form.code,phone:props.location.state.phone}
-              axios.post('http://localhost:3001/confirmation',data)
-              .then((r)=>
-              {
-                if(r.data.status === "success")
+      axios.post('http://localhost:3001/confirmation',data)
+      .then((r)=>
+      {
+        if(r.data.status === "success")
+          {
+              localStorage.setItem('token',r.data.token)
+              localStorage.setItem('type',r.data.type)
+              if(r.data.data == 1)
                 {
-                    props.history.push({
-                      pathname: '/login',
-                      state: { detail: r.data.data ,phone: form.phone}
-                    })
+                  props.history.push("/map") 
                 }
-                else
+              else
                 {
-                  mssg =t('login.'+r.data.data)
-                  setOpen(true);
+                  props.history.push("/map_ven")
                 }
-              })
+          }
+          else
+          {
+            mssg =t('login.'+r.data.data)
+            setOpen(true);
+          }
+      })
   };
   const handleChangeCode =(e)=>
   {
@@ -164,7 +146,7 @@ export default function SignUp(props) {
           <PersonAddOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          VERIFY CODE
+        {t('conf.VERIFY')}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -175,7 +157,7 @@ export default function SignUp(props) {
                   required
                   fullWidth
                   id="verification"
-                  label="CODE"
+                  label={t('conf.VERIF_CODE')}
                   name="verification"
                   autoComplete="verification"
                   InputProps={{
@@ -193,7 +175,7 @@ export default function SignUp(props) {
               className={classes.submit}
               onClick={send}
             >
-              SEND
+              {t('conf.SEND')}
           </ColorButton>
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="error" >
@@ -202,9 +184,6 @@ export default function SignUp(props) {
           </Snackbar>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </ContainerR>
   );}
   else{
@@ -257,9 +236,6 @@ export default function SignUp(props) {
           </Snackbar>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyrightar />
-      </Box>
     </ContainerR>
   );
   }

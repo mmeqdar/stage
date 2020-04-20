@@ -59,9 +59,8 @@ class User {
         ))
     }
     /*----------------------register-----------------*/
-    register(name,phone,pswd,region,type,lat,lng)
+    register(name,phone,pswd,type,lat,lng)
     {
-        console.log(type+" "+lat+" "+lng)
         return new Promise((resolve, reject) => ( 
             this.database.query(USERS.GET_BY_PHONE,phone)
             .then((r)=>
@@ -76,7 +75,7 @@ class User {
                     var salt = bcrypt.genSaltSync(saltRounds);
                     var hash_pass = bcrypt.hashSync(pswd, salt);
                     
-                    this.database.query(USERS.ADD_USER,[name,phone,hash_pass,region,type,lat,lng])
+                    this.database.query(USERS.ADD_USER,[name,phone,hash_pass,type,lat,lng])
                     .then((r)=>{
                         console.table(r)
                         if(r.err)
@@ -107,7 +106,6 @@ class User {
                                     }
                                     else
                                     {
-                                        console.log("malooo")
                                         this.database.query(USERS.DELETE_USER,[phone])
                                         resolve({status :'failure',data :"GENERAL"})
                                     }
@@ -121,49 +119,58 @@ class User {
             })
         ))
     }
-    /*----------------------confirmation-----------------*/
+/*----------------------confirmation-----------------*/
 confirmation(id,code,phone)
-    {
-       return new Promise((resolve, reject) => ( 
-            this.database.query(USERS.GET_BY_NEXMO_PHONE,[id,phone])
-            .then((r)=>
+{
+   return new Promise((resolve, reject) => ( 
+        this.database.query(USERS.GET_BY_NEXMO_PHONE,phone)
+        .then((r)=>
+        {
+            if(r[0].cnt != 0)
             {
-                if(r[0].cnt != 0)
-                {
-                    nexmo.verify.check({
-                        request_id: id,
-                        code: code
-                      }, (err, result) => {
-                          
-                        console.log(err ? err : result)
-                        if(err)
-                                  {
-                                      resolve({status :'failure',data :"GENERAL"})
-                                  }
-                                  else
-                                  {
-                                    if(result.status === '0')
-                                    {
-                                        this.database.query(USERS.CONFIRMATON,[phone])
-                                        resolve({status :'success',data :"done"})
-                                    }
-                                    else
-                                        resolve({status :'failure',data :"GENERAL"})
-                                  }
-                      });
-                }
-                else
-                {
-                    resolve({status :'failure',data :"GENERAL"})
-                }
-            })
-            .catch((err)=>
+                nexmo.verify.check({
+                    request_id: id,
+                    code: code
+                  }, (err, result) => {
+                      
+                    console.log(err ? err : result)
+                    if(err)
+                    {
+                        resolve({status :'failure',data :"GENERAL"})
+                    }
+                    else
+                    {
+                        if(result.status === '0')
+                        {
+                            this.database.query(USERS.CONFIRMATON,[phone])
+                            .then(()=>
+                            {
+                                this.database.query(USERS.GET_BY_PHONE,phone)
+                                .then((r)=>
+                                {
+                                    const token = jwt.sign({ id: r[0].id_user },'mmeqfall')
+                                    const type = jwt.sign({ type: r[0].type },'mmeqfall')
+                                    resolve({status :'success',data:r[0].type,token:token,type:type})
+                                })
+                            })
+                       }
+                        else
+                            resolve({status :'failure',data :"GENERAL"})
+                    }
+                  });
+            }
+            else
             {
-                console.log(err)
                 resolve({status :'failure',data :"GENERAL"})
-            })
-        ))
-    }
+            }
+        })
+        .catch((err)=>
+        {
+            console.log(err)
+            resolve({status :'failure',data :"GENERAL"})
+        })
+    ))
+}
 /*----------------------send code for change pswd -----------------*/
 forgot(phone)
     {
@@ -380,7 +387,7 @@ forgot1(id,code,phone)
             })
         ))
     }
-    add_cart(id_user,id_annonce)
+    add_cart(id_user,id_annonce,quantite)
     {
         return new Promise((resolve, reject) => ( 
             this.database.query(USERS.COUNT_CART,[id_user,id_annonce])
@@ -388,11 +395,30 @@ forgot1(id,code,phone)
             {
                 if(r[0].cnt == 0)
                 {
-                    this.database.query(USERS.INSERT_CART,[id_user,id_annonce])
+                    this.database.query(USERS.INSERT_CART,[id_user,id_annonce,quantite])
                     .then((r)=>
                     {
-                        console.log("done")
-                        resolve({status :'success',data :"done"})
+                        this.database.query(USERS.GET_QUNATITE_ANN,[id_annonce])
+                        .then((r)=>
+                        {
+                            const q = r[0].quantity - quantite
+                            this.database.query(USERS.UPDATE_ANN_QUANTITE,[q,id_annonce])
+                            .then((r)=>
+                            {
+                                console.log("done")
+                                resolve({status :'success',data :"done"})
+                            })
+                            .catch(()=>
+                            {
+                                console.log("erreeuuuuurr")
+                                resolve({status :'failure',data :"GENERAL"})
+                            })
+                        })
+                        .catch(()=>
+                        {
+                            console.log("erreeuuuuurr")
+                            resolve({status :'failure',data :"GENERAL"})
+                        })
                     })
                     .catch(()=>
                     {
@@ -412,6 +438,56 @@ forgot1(id,code,phone)
     {
         return new Promise((resolve, reject) => ( 
             this.database.query(USERS.GET_CART,id)
+            .then((r)=>
+            {
+                console.log(r)
+                resolve(r)
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    add_local(id,lat,lng)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_INFO,id)
+            .then((r)=>
+            {
+                this.database.query(USERS.ADD_FERME,[id,lat,lng,r[0].type])
+                .then((r)=>
+                {
+                    console.log("done")
+                    console.log(r)
+                    resolve(r)
+                })
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    get_local(id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_FERME,id)
+            .then((r)=>
+            {
+                console.table(r)
+                resolve(r)
+            })
+            .catch(()=>
+            {
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    get_coop(id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_COOP,id)
             .then((r)=>
             {
                 console.log(r)

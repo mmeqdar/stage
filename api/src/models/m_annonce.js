@@ -6,11 +6,11 @@ class Annonce {
     {
         this.database = new Database();
     }
-    annonce(des,quantity,prix,id_category,id,type_annonce)
+    annonce(des,quantity,prix,id_category,id,type_annonce,id_cf)
     {
         console.log("-------model------")
         return new Promise((resolve, reject) => (
-            this.database.query(USERS.ADD_ANNONCE,[des,quantity,prix,id_category,id,type_annonce])
+            this.database.query(USERS.ADD_ANNONCE,[des,quantity,prix,id_category,id,type_annonce,id_cf])
             .then((r)=>
             {
                 console.log("-------model------")

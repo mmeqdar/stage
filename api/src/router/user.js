@@ -65,12 +65,9 @@ const local = router.post('/local' , function(req, res) {
     })
 })
 const register =  router.post('/register', function (req, res) {
-    console.log("1) llaaattt : "+req.body.type)
-    var lat = req.body.lat
-    var lng = req.body.lng
-
     if(req.body.phone && req.body.name && req.body.pswd )
         {
+            console.table(req.body)
             var letter = /^[a-zA-Z ]+$/;
             if(req.body.name.length >= 5 && req.body.name.length <= 30 && req.body.name.match(letter))
             {
@@ -88,33 +85,18 @@ const register =  router.post('/register', function (req, res) {
                     }
                     if(n != 0 && u != 0 && l != 0 && req.body.pswd.length > 5 && req.body.pswd.length < 20)
                     {
-                        if(req.body.region === 1 || req.body.region === 2 || req.body.region === 3 || req.body.region === 4 || req.body.region === 5 || req.body.region === 6 || req.body.region === 7 || req.body.region === 8 || req.body.region === 9 || req.body.region === 10 || req.body.region === 11 || req.body.region === 12)
+                        if(req.body.type == 1 || req.body.type == 2 || req.body.type == 0 )
                         {
                             const user = new User()
-                            if(isEmpty(lat) && isEmpty(lng))
-                            {
-                                console.log("emptyy")
-                                ipInfo((err, cLoc) => {
-                                    console.log()
-                                    const test = cLoc.loc;
-                                    const t = test.split(',');
-                                    lat = t[0]
-                                    lng = t[1]
-                                    console.log("1) llaaattt : "+lat+" , llnnngg : "+lng)
-                                    user.register(req.body.name,req.body.phone,req.body.pswd,req.body.region,req.body.type,lat,lng)
-                                    .then((r)=>
-                                    {
-                                        console.log(r)
-                                        res.send(r)
-                                    })
-                                    .catch((err)=>{
-                                        resolve({status :'failure',data :"GENERAL"})
-                                    })
-                                })
-                            }
-                            else
-                            {
-                                user.register(req.body.name,req.body.phone,req.body.pswd,req.body.region,req.body.type,lat,lng)
+                            console.log("emptyy")
+                            ipInfo((err, cLoc) => {
+                                console.log()
+                                const test = cLoc.loc;
+                                const t = test.split(',');
+                               var lat = t[0]
+                                var lng = t[1]
+                                console.log("1) llaaattt : "+lat+" , llnnngg : "+lng)
+                                user.register(req.body.name,req.body.phone,req.body.pswd,req.body.type,lat,lng)
                                 .then((r)=>
                                 {
                                     console.log(r)
@@ -123,11 +105,12 @@ const register =  router.post('/register', function (req, res) {
                                 .catch((err)=>{
                                     resolve({status :'failure',data :"GENERAL"})
                                 })
-                            }
+                            })
                         }
                         else
                         {
-                            res.send({status :'failure',data :"REGION"})
+                            console.log("tyypppee")
+                            res.send({status :'failure',data :"TYPE"})
                         }
                     }
                     else
@@ -451,7 +434,7 @@ const add_cart =  router.post('/add_cart', function (req, res) {
     token.token(req.body.token).then((r)=>{
         if(r !== -2)
         {
-            user.add_cart(r,req.body.id)
+            user.add_cart(r,req.body.id,req.body.quantite)
             .then((r)=>
             {
                 res.send(r)
@@ -470,10 +453,92 @@ const add_cart =  router.post('/add_cart', function (req, res) {
 const get_cart =  router.post('/get_cart', function (req, res) {
     const user = new User()
     const token = new Token()
+    var total_coop = 0
     token.token(req.body.token).then((r)=>{
         if(r !== -2)
         {
             user.get_cart(r)
+            .then((r)=>
+            {
+                for(var i = 0 ;i < r.length  ;i++)
+                {
+                    total_coop = (r[i].prix * r[i].quantity)
+                    for(var j = i ; j < r.length  ; j++)
+                    {  
+                        if(r[j+1] && r[j].id_coop == r[j+1].id_coop)
+                        {
+                            console.log(r[j].id_coop,r[j+1].id_coop)
+                            total_coop +=  (r[j+1].prix * r[j+1].quantity)  
+                            console.log(i+"----totaaall---"+total_coop)
+                        }
+                    }
+                    Object.assign(r[i], {total_coop: total_coop})
+                }
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+const add_local =  router.post('/add_local', function (req, res) {
+    const user = new User()
+    const token = new Token()
+    token.token(req.body.token).then((r)=>{
+        if(r !== -2)
+        {
+            user.add_local(r,req.body.lat,req.body.lng)
+            .then((r)=>
+            {
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+const get_local =  router.post('/get_local', function (req, res) {
+    const user = new User()
+    const token = new Token()
+    token.token(req.body.token).then((r)=>{
+        if(r !== -2)
+        {
+            user.get_local(r)
+            .then((r)=>
+            {
+                res.send(r)
+            })
+            .catch((err)=>{
+                res.send({status :'failure',data :"GENERAL"})
+            })
+        }
+        else
+        res.send({status :'failure',data :"GENERAL"})
+    })
+    .catch((err)=>{
+        res.send({status :'failure',data :"GENERAL"})
+    })
+});
+const get_coop =  router.post('/get_coop', function (req, res) {
+    const user = new User()
+    const token = new Token()
+    // var t = 0
+    token.token(req.body.token).then((ra)=>{
+        if(ra !== -2)
+        {
+            user.get_coop(ra)
             .then((r)=>
             {
                 res.send(r)
@@ -503,3 +568,6 @@ module.exports = update_pic
 module.exports = local
 module.exports = add_cart
 module.exports = get_cart
+module.exports = add_local
+module.exports = get_local
+module.exports = get_coop

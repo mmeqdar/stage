@@ -10,18 +10,10 @@ class User {
         this.database = new Database();
     }
     /*---------------------search------------------*/
-    search(reg,cat,type)
+    search(cat,id)
     {
-        console.log(reg,cat)
-        var req=null
-        if(reg != null && cat == null)
-            req = this.database.query(USERS.GET_BY_REG,[reg,type])
-        if(reg == null && cat != null)
-            req = this.database.query(USERS.GET_BY_CAT,[cat,type])
-        if(reg != null && cat != null)
-            req = this.database.query(USERS.GET_BY_CAT_REG,[reg,cat,type])
         return new Promise((resolve, reject) => ( 
-            req.then((r)=>
+            this.database.query(USERS.GET_BY_CAT,[cat,id]).then((r)=>
             {
                 resolve(r)
             })
@@ -61,10 +53,10 @@ class User {
             })
         ))
     }
-    all_user(type)
+    all_user()
     {
         return new Promise((resolve, reject) => ( 
-            this.database.query(USERS.GET_ALL_USR,type).then((r)=>
+            this.database.query(USERS.GET_ALL_CF).then((r)=>
             {
                 console.log(r)
                     resolve(r); 
@@ -80,6 +72,20 @@ class User {
     {
         return new Promise((resolve, reject) => ( 
             this.database.query(USERS.GET_ANN_NFO,id).then((r)=>
+            {
+                resolve(r)
+            })
+            .catch((er)=>
+            {
+                console.log(er)
+                resolve({status :'failure',data :"GENERAL"})
+            })
+        ))
+    }
+    get_all_ann_CF(id)
+    {
+        return new Promise((resolve, reject) => ( 
+            this.database.query(USERS.GET_ANN_CF,id).then((r)=>
             {
                 resolve(r)
             })

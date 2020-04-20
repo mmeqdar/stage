@@ -71,13 +71,17 @@
         "ContinueShopping":"Continuer vos achats",
         "delivery":"Payer à la livraison",
         "credit":"Paiement par carte de crédit",
+        "PSP":"Payez sur place",
         "H1":"Dédié au Producteurs Marocains",
         "H2":"Industrie traditionnelle directement du fabricant",
         "H3":"Facile à utiliser",
         "demandes":"Demandes",
         "action":"Action",
         "accepter":"Accepter",
-        "refuse":"Refuser"
+        "refuse":"Refuser",
+        "done":"Ajouté avec succès",
+        "ADD_LOC":"Voulez-vous vraiment ajouter cette localisation:",
+        "DEL_PRO":"Voulez-vous vraiment supprimer cet élément?"
     },
     "annonce":
     {
@@ -99,7 +103,8 @@
         "ERR_GENERAL":"Une erreur s'est produite, Veuillez réessayer plus tard !!",
         "DATA_MISSING": "Un ou plusieurs arguments sont manquants !!",
         "BUTTN":"Éditer votre annonce",
-        "B":"Éditer"
+        "B":"Éditer",
+        "indispo":"La quantité n'est pas disponible"
     }
     
 }

@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -22,7 +21,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import PhoneOutlinedIcon from '@material-ui/icons/PhoneOutlined';
 import { useTranslation } from 'react-i18next';
 import './index.css';
-import myInitObject from './../../const'
 var mssg = null
 var form={
   phone:null,
@@ -54,15 +52,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     height: '100vh',
   },
-  image: {
-    backgroundImage: 'url(https://lh3.googleusercontent.com/proxy/oZpTD7RHGaoRbyuID6S7Fv3SLd6i2uFb8SIs5FD4k9C4YOEvzJLV1MlpDBpCa_XDCH7bwfQ5VdvoV2SaOS_HouWpsfrQshTfXREb_IPF1j0-Zb8gVhh6d5X_OhGpcy-Jqw6wVxNDicYMgDCnub8tcC8Rnmczi4iSwts2jVkUu180_MU-u_pjwr_pwiNHdC6w0wMfukrVhlLpgxa41Jia93lWuHOPUp37xQ)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: green[400],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
   paper: {
-    //margin: theme.spacing(8, 4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -85,8 +75,13 @@ const useStyles = makeStyles(theme => ({
       color : green[700],
     },
   },
-  input: {
-    color: green[700],
+  p:{
+    color: "white",
+    fontSize: "22px"
+  },
+  span:{
+    fontSize: "30px",
+    color: "black"
   }
 }));
 
@@ -152,35 +147,21 @@ export default function SignInSide(props) {
     {
       if(form.phone.length === 10 && Number.isInteger(parseInt(form.phone)))
         {
-          /*var n = 0, u = 0,l = 0, Upper = /^[A-Z]+$/, Lower = /^[a-z]+$/, number = /^[0-9]+$/;
-          for(var i = 0 ;i<form.pswd.length;i++)
-          {
-            if(form.pswd[i].match(Upper))
-                u = 1
-            if(form.pswd[i].match(Lower))
-                l = 1
-            if(form.pswd[i].match(number))
-                n = 1
-          }
-          if(n !== 0 && u !== 0 && l !== 0 && form.pswd.length > 5 && form.pswd.length <21)
-          {*/
               const data ={phone:form.phone ,pswd:form.pswd}
               axios.post('http://localhost:3001/login',data)
               .then((r)=>
               {
                   if(r.data.status === "success")
                   {
-                  /* window.$user = r.data.data
-                  console.log("window : "+r.data.data)*/
                       localStorage.setItem('token',r.data.token)
                       localStorage.setItem('type',r.data.type)
                       if(r.data.data == 1)
                         {
-                          props.history.push("/") 
+                          props.history.push("/map") 
                         }
                       else
                         {
-                          props.history.push("/home1")
+                          props.history.push("/map_ven")
                         }
                   }
                   else
@@ -190,13 +171,6 @@ export default function SignInSide(props) {
                   }
               })
               .catch() 
-         /* }
-          else
-          {
-            mssg = "Password requires at least 1 lower 1 upper case letter and 1 digit and between 5 and 20"
-            setOpen(true);
-          }*/
-      
         }
         else
         {
@@ -236,8 +210,8 @@ export default function SignInSide(props) {
 if(localStorage.getItem('langue')  !== "ar")
   {
   return (
-    <React.Fragment>
-                <section className="login-area">
+    <React.Fragment >
+                <section className="login-area scene__home">
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-6 col-md-12">
@@ -295,10 +269,9 @@ if(localStorage.getItem('langue')  !== "ar")
                                         </InputAdornment>,
                                         }}
                                       />
-                                          <Link href="/forgot" variant="body2" className={classes.colorLink}>
-                                            {t('login.F_MDP')}
-                                          </Link>
-                                        
+                                        <Link href="/forgot" variant="body2" className={classes.colorLink}>
+                                          {t('login.F_MDP')}
+                                        </Link>
                                       </Grid>
                                       <ColorButton
                                         fullWidth
@@ -314,14 +287,11 @@ if(localStorage.getItem('langue')  !== "ar")
                                           {mssg}
                                         </Alert>
                                     </Snackbar>
-                                      {/* <Grid container > */}
                                         <Grid item>
                                           <Link href="/register" variant="body2" className={classes.colorLink}>
                                             {t('login.TO_SIGNUP')}
                                           </Link>
                                         </Grid>
-                                      {/* </Grid> */}
-                                      
                                       </ThemeProvider>
                                     </form>
                                   </div>
@@ -330,8 +300,8 @@ if(localStorage.getItem('langue')  !== "ar")
 
                             <div className="col-lg-6 col-md-12 mt-5">
                                 <div className="new-customer-content">
-                                    <span>{t('login.OPEN')}</span>
-                                      <p>{t('login.TEXT')}</p>
+                                    <p className={classes.span}>{t('login.OPEN')}</p>
+                                      <p className={classes.p}>{t('login.TEXT')}</p>
                                     <Link href="/register" >
                                         <a className="btn btn-light">{t('login.OPEN')}</a>
                                     </Link>
@@ -347,13 +317,13 @@ else
 {
   return (
 <React.Fragment>
-    <section className="login-area">
+    <section className="login-area scene__home">
         <div className="container">
             <div className="row">
                 <div className="col-lg-6 col-md-12 mt-5">
-                    <div className="new-customer-content-ar">
-                        <span >قم بإنشاء حساب</span>
-                        <p>قم بالتسجيل للحصول على حساب مجاني في متجرنا. تسجيل سريع وسهل. يسمح لك أن تكون قادراً على الطلب من متجرنا. لبدء التسوق ، انقر فوق تسجيل.</p>
+                    <div className="new-customer-content-ar" style={{paddingTop: "20px"}}>
+                        <p className={classes.span}>قم بإنشاء حساب</p>
+                        <p className={classes.p}>قم بالتسجيل للحصول على حساب مجاني في متجرنا. تسجيل سريع وسهل. يسمح لك أن تكون قادراً على الطلب من متجرنا. لبدء التسوق ، انقر فوق تسجيل.</p>
                         <Link href="/register" >
                             <a className="btn btn-light btn-a">إنشاء حساب</a>
                         </Link>
@@ -423,6 +393,9 @@ else
                             }}
                         />
                         </Grid>
+                        <Link href="/forgot" mt={2} variant="body2" className={classes.colorLink} style={{ textAlign: "right"}}>
+                            نسيت كلمة السر؟
+                          </Link>
                         <ColorButton
                             fullWidth
                             variant="contained"
@@ -437,18 +410,9 @@ else
                                 {mssg}
                             </Alert>
                         </Snackbar>
-                        <Grid container >
-                            <Grid item xs >
-                            <Link href="/forgot" variant="body2" className={classes.colorLink}>
-                            نسيت كلمة السر؟
-                            </Link>
-                            </Grid>
-                            <Grid item>
-                            <Link href="/register" variant="body2" className={classes.colorLink}>
+                            <Link href="/register" variant="body2" className={classes.colorLink} style={{ textAlign: "right"}}>
                                 {"لا تملك حساب؟ أفتح حساب الأن"}
                             </Link>
-                            </Grid>
-                        </Grid>
                         </ThemeProvider>
                         </form>
                     </div>
