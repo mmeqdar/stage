@@ -18,7 +18,7 @@ import Footer from "./view/footer/";
 import MesAnnonce from "./view/mesAnnonce/me";
 import Map from "./view/map_ach/";
 import MapV from "./view/map_vendeur/";
-import Cart from "./view/cart/cart";
+import Cart from "./view/cart/";
 import Axios from 'axios';
 
 //const  createBrowserHistory = require("history/createBrowserHistory")

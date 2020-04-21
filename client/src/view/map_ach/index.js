@@ -59,16 +59,15 @@ function Alert(props) {
       }, []);
   const  Map = ()=> {
     
-    function mp(type)
+    function mp(pic)
     {
-      if(type === 0)
-        return ferme
-      else
-        return shop
+      var t = `http://localhost:3001/images/`+pic
+      return (t)
+
     }
     return (
       <GoogleMap
-      defaultZoom={5}
+      defaultZoom={5.5}
       defaultCenter={{ lat: 28.530768778345408, lng: -9.669413157291313 }}
       defaultOptions={{ styles: mapStyles }}
       >
@@ -81,8 +80,8 @@ function Alert(props) {
           }}
           
           icon={{
-            url:mp(element.type),
-            scaledSize: new window.google.maps.Size(50, 50)
+            url:mp(element.profil),
+            scaledSize: new window.google.maps.Size(30, 30)
           }}
           onClick={()=>{info(element.id_user,element.lat,element.lng,element.fullName,element.id_cf)}}
         /> 
@@ -110,9 +109,10 @@ function Alert(props) {
           <table className="table">
           {table.tableau && table.tableau.map((element,index)=>(<tr className="trInfo" onClick={()=>{show(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}} key={index}>
             <td colspan="2" className="tdimginfo mr-3"><img className="imginfo" src ={`http://localhost:3001/images/${element.name_images}`}></img></td>
-            <td><span className="span">{t('home.PRIX')} :</span> {element.prix}{t('home.PRICE')} <br/>
-                <span className="span">{t('home.QUAN')} :</span> {element.quantity}{t('home.KG')}<br/>
-                <span className="span">{t('home.CAT')} :</span> {element.name_categorie}<br/>
+            <td><tr><td><span className="span ">{t('home.PRIX')}</span><br/> {element.prix}{t('home.PRICE')} </td>
+                <td><span className="span">{t('home.QUAN')}</span> <br/>{element.quantity}{t('home.KG')}</td>
+                <td><span className="span">{t('home.CAT')}</span><br/> {element.name_categorie}</td>
+                </tr>
             </td>
           </tr>))}
           {table.tableau.length == 0 &&<tr><td>aucun produit</td></tr>}
@@ -247,7 +247,8 @@ const handleClose = (event, reason) => {
   
       setOpen(false);
     };
-    return(
+    if(localStorage.getItem('langue') === 'ar') {
+      return (
         <div className="map">
             <MapWrapped googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3&language=ar&libraries=places&key=AIzaSyAPmEexK0qohaFbERtXwsykYnjKhrcuATk`}
         loadingElement={<div style={{ height: `100%` }} />}
@@ -274,13 +275,90 @@ const handleClose = (event, reason) => {
                             </div>
                             <div className="col-lg-5 col-md-5">
                                 <div className="product-content">
-                                    <h3>{produit.descri}</h3>
-                                    <ul className="product-info">
-                                        <li><span>{t('home.PRIX')}:</span>{produit.prix}{t('home.PRICE')} </li>
-                                        <li><span>{t('home.QUAN')}:</span> {produit.quan}{t('home.KG')}</li>
-                                        <li><span>{t('home.CAT')}:</span>{produit.cat}</li>
-                                        <li><span>{t('home.PHO')}:</span>0{produit.phone}</li>
-                                    </ul>
+                                    <h3 className="ml-5">{produit.descri}</h3>
+                                    <table className="product-info">
+                                       <tr><td>{produit.prix}{t('home.PRICE')} </td><td><span className="span">:{t('home.PRIX')}</span></td></tr> 
+                                       <tr> <td>{produit.quan}{t('home.KG')}</td><td><span className="span">:{t('home.QUAN')}</span> </td></tr> 
+                                       <tr> <td>{produit.cat}</td><td><span className="span">:{t('home.CAT')}</span></td></tr> 
+                                       <tr> <td>0{produit.phone}</td><td><span className="span">:{t('home.PHO')}</span></td></tr> 
+                                    </table>
+                                    <div className="row product-add-to-cart mt-5">
+                                    <Grid item xs={5} className="col">
+                                  <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    onChange={handleChangeQuantity}
+                                    type="number"
+                                    id="quantity"
+                                    label={t('annonce.QUANTITY')}
+                                    autoComplete="quantity"
+                                    InputProps={{
+                                      endAdornment: <InputAdornment position="end"></InputAdornment>,
+                                    }}
+                                   /* inputProps={{
+                                      style: { textAlign: align },
+                                    }}*/
+                                  />
+                              </Grid>
+                                        <button 
+                                            className="btn btn-primary col mt-2"
+                                            onClick={handleAddToCartFromView}
+                                        >
+                                            <ShoppingCartIcon/> {t('home.ADD')}
+                                        </button>
+                                        
+                                    </div>
+                                    <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                                        <Alert onClose={handleClose}  severity={status}>
+                                          {msg}
+                                        </Alert>
+                                    </Snackbar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+        </div>
+        
+    )}
+    else
+    {
+      return (
+        <div className="map">
+            <MapWrapped googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3&language=ar&libraries=places&key=AIzaSyAPmEexK0qohaFbERtXwsykYnjKhrcuATk`}
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={{ height: `100%` }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+        
+      />
+      {tn.n === true && tableauShow && <div className="modal  productQuickView show" style={{paddingRight: '16px', display: 'block'}}>
+            <ToastContainer />
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                        <button type="button" onClick={close} className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><HighlightOffIcon/></span>
+                        </button>
+                        <div className="row align-items-center">
+                            <div className="col-lg-6 col-md-6">
+                                <div className="productQuickView-image imgs">
+                                    <img src={`http://localhost:3001/images/${tableauShow[produit.len].name_images}`} alt="image" /> 
+
+                                </div>
+                            </div>
+                            <div className="col-lg-1 col-md-1">
+                                <div className="vl"></div>
+                            </div>
+                            <div className="col-lg-5 col-md-5">
+                                <div className="product-content">
+                                    <h3 className="ml-5">{produit.descri}</h3>
+                                    <table className="product-info">
+                                       <tr><td><span>{t('home.PRIX')}:</span></td><td>{produit.prix}{t('home.PRICE')} </td></tr> 
+                                       <tr> <td><span>{t('home.QUAN')}:</span></td><td> {produit.quan}{t('home.KG')}</td></tr> 
+                                       <tr> <td><span>{t('home.CAT')}:</span></td><td>{produit.cat}</td></tr> 
+                                       <tr> <td><span>{t('home.PHO')}:</span></td><td>0{produit.phone}</td></tr> 
+                                    </table>
                                     <div className="row product-add-to-cart mt-5">
                                     <Grid item xs={5} className="col">
                                   <TextField
@@ -322,4 +400,5 @@ const handleClose = (event, reason) => {
         </div>
         
     )
+    }
 }

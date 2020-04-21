@@ -224,21 +224,21 @@ const img = {
     /*---------------------------------------*/
   const classes = useStyles();
   const { t } = useTranslation();
-  const [data, setData] = useState({ hits: [] });
+  const [data, setData] = useState({ hits: [],profil : null });
   axios.post('http://localhost:3001/check_type',{type:localStorage.getItem('type')}).then((r)=>{
     //------------- check type
   })
         useEffect(() => {
         const fetchData = async () => {
             const result = await axios.post('http://localhost:3001/get_local',{token:localStorage.getItem('token')});
-            setData({hits:result.data});
+            setData({hits:result.data,profil:result.data[0].profil});
             };
         fetchData();
       }, []);
      
       const add_marker =(e)=>
        { 
-        if (window.confirm(t('home.ADD_LOC')+e.latLng+'?'))
+        if (window.confirm(t('home.ADD_LOC')+'?'))
         {
           axios.post('http://localhost:3001/add_local',{token:localStorage.getItem('token'),token:localStorage.getItem('token'),lat:e.latLng.lat(),lng:e.latLng.lng()})
           .then(()=>
@@ -253,9 +253,14 @@ const img = {
       }
    
   const  Map = ()=> {
+    function mp()
+    {
+      var t = `http://localhost:3001/images/`+data.profil
+      return t
+    }
     return (
       <GoogleMap
-        defaultZoom={5}
+        defaultZoom={5.6}
         defaultCenter={{ lat: 28.530768778345408, lng: -9.669413157291313 }}
         defaultOptions={{ styles: mapStyles }}
         onClick={(e)=>{add_marker(e)}}
@@ -275,8 +280,8 @@ const img = {
           }}
           
           icon={{
-            url:shop,
-            scaledSize: new window.google.maps.Size(50, 50)
+            url:mp(),
+            scaledSize: new window.google.maps.Size(30, 30)
           }}
           onClick={()=>{info(element.id_cf,element.lat,element.lng)}}
         />))}
@@ -295,9 +300,12 @@ const img = {
           <table className="table">
           {table.tableau && table.tableau.map((element,index)=>(<tr className="trInfo"  key={index}>
             <td colspan="2" onClick={()=>{show(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}} className="tdimginfo mr-3"><img className="imginfo" src ={`http://localhost:3001/images/${element.name_images}`}></img></td>
-            <td onClick={()=>{show(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}}><span className="span">{t('home.PRIX')} :</span> {element.prix}{t('home.PRICE')} <br/>
-                <span className="span">{t('home.QUAN')} :</span> {element.quantity}{t('home.KG')}<br/>
-                <span className="span">{t('home.CAT')} :</span> {element.name_categorie}<br/>
+            <td onClick={()=>{show(element.id_annonce,element.quantity,element.prix,element.name_region,element.name_categorie,element.phone,element.description)}}>
+              <tr>
+               <td> <span className="span">{t('home.PRIX')} </span><br/> {element.prix}{t('home.PRICE')} </td>
+               <td>  <span className="span">{t('home.QUAN')} </span> <br/>{element.quantity}{t('home.KG')}</td>
+               <td>  <span className="span">{t('home.CAT')} </span> <br/>{element.name_categorie}</td>
+                </tr>
             </td>
             <td><DeleteIcon className="deletButton" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) del(element.id_annonce)}}/>
             </td>
@@ -534,6 +542,7 @@ const img = {
       }
     })
   }
+  if(localStorage.getItem('langue') === 'ar') {
     return(
         <div className="map">
             <MapWrapped googleMapURL={`https://maps.googleapis.com/maps/api/js?v=2&language=ar&libraries=places&key=AIzaSyAPmEexK0qohaFbERtXwsykYnjKhrcuATk`}
@@ -559,13 +568,171 @@ const img = {
                             </div>
                             <div className="col-lg-5 col-md-5">
                                 <div className="product-content">
-                                    <h3>{produit.descri}</h3>
-                                    <ul className="product-info">
-                                        <li><span>{t('home.PRIX')}:</span>{produit.prix}{t('home.PRICE')} </li>
-                                        <li><span>{t('home.QUAN')}:</span> {produit.quan}{t('home.KG')}</li>
-                                        <li><span>{t('home.CAT')}:</span>{produit.cat}</li>
-                                        <li><span>{t('home.PHO')}:</span>0{produit.phone}</li>
-                                    </ul>
+                                    <h3 className="ml-5">{produit.descri}</h3>
+                                    <table className="product-info">
+                                       <tr><td>{produit.prix}{t('home.PRICE')} </td><td><span className="span">:{t('home.PRIX')}</span></td></tr> 
+                                       <tr> <td>{produit.quan}{t('home.KG')}</td><td><span className="span">:{t('home.QUAN')}</span> </td></tr> 
+                                       <tr> <td>{produit.cat}</td><td><span className="span">:{t('home.CAT')}</span></td></tr> 
+                                       <tr> <td>0{produit.phone}</td><td><span className="span">:{t('home.PHO')}</span></td></tr> 
+                                    </table>
+                                    <div className="product-add-to-cart mt-5">
+                                        <button 
+                                            type="submit" 
+                                            className="btn btn-primary"
+                                            onClick={handleAddToCartFromView}
+                                        >
+                                            <ShoppingCartIcon/> {t('home.ADD')}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+           
+            {tn.n2 === true && <div className="modal  productQuickView show" style={{paddingRight: '160px', display: 'block'}}>
+            <ToastContainer />
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                        <button type="button" onClick={close} className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><HighlightOffIcon/></span>
+                        </button>
+                        <div className="row align-items-center">
+                        <form className={classes.form}  noValidate>
+                        <Grid container spacing={2}>
+                        <ThemeProvider theme={theme}>
+                        <FormControl variant="outlined"  className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-filled-label">{t('annonce.CATEGORY')}*</InputLabel>
+                        <Select
+                          label={t('annonce.CATEGORY')}
+                          labelId="demo-simple-select-filled-label"
+                          id="demo-simple-select-filled"
+                          value={category}
+                          onChange={handleChangeCategory}
+                        >
+                          {data_cate}
+                        </Select>
+                          </FormControl>
+                          <Grid item xs={12}>
+                          <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            onChange={handleChangeQuantity}
+                            type="number"
+                            id="quantity"
+                            label={t('annonce.QUANTITY')}
+                            autoComplete="quantity"
+                            InputProps={{
+                              endAdornment: <InputAdornment position="end"></InputAdornment>,
+                            }}
+                            inputProps={{
+                              style: { textAlign: align },
+                            }}
+                          />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          onChange={handleChangeDesc}
+                          label={t('annonce.DESCRIPTION')}
+                          id="text"
+                          multiline
+                          rows={4}
+                          inputProps={{
+                              style: { textAlign: align },
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          onChange={handleChangePrix}
+                          label={t('annonce.PRICE')}
+                          id="prix"
+                          type="number"
+                          InputProps={{
+                              endAdornment: <InputAdornment position="end">{t('home.PRICE')} </InputAdornment>,
+                          }}
+                          inputProps={{
+                              style: { textAlign: align },
+                          }}
+                        />
+                      </Grid>
+                      <section >
+                      <div {...getRootProps()} style={{marginTop: "2%" , marginLeft: "30%", marginRight:"30%" ,  textAlign: "center", border: "dashed", borderColor: green[500]}}>
+                      <input {...getInputProps()} />
+                      <AddAPhotoOutlinedIcon  style={{ fontSize: 60, color: green[500] }}/>
+                      </div>
+                      <aside style={thumbsContainer}>
+                          {thumbs}
+                      </aside>
+                     </section>
+                     <ColorButton
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={annonce}
+                    >
+                      {t('annonce.BTN')}
+                  </ColorButton>
+                  <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+                      <Alert onClose={handleClose}  severity={status}>
+                         {msg}
+                      </Alert>
+                  </Snackbar>
+                        </ThemeProvider>
+                        </Grid>
+
+                        </form>
+                </div>
+                </div>
+                </div>
+                </div>
+            }
+        </div>
+        
+    )}
+    else
+    {
+      return(
+        <div className="map">
+            <MapWrapped googleMapURL={`https://maps.googleapis.com/maps/api/js?v=2&language=ar&libraries=places&key=AIzaSyAPmEexK0qohaFbERtXwsykYnjKhrcuATk`}
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={{ height: `100%` }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+      />
+      {tn.n === true && tableauShow && <div className="modal  productQuickView show" style={{paddingRight: '16px', display: 'block'}}>
+            <ToastContainer />
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                        <button type="button" onClick={close} className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><HighlightOffIcon/></span>
+                        </button>
+                        <div className="row align-items-center">
+                            <div className="col-lg-6 col-md-6">
+                                <div className="productQuickView-image imgs">
+                                    <img src={`http://localhost:3001/images/${tableauShow[produit.len].name_images}`} alt="image" /> 
+                                </div>
+                            </div>
+                            <div className="col-lg-1 col-md-1">
+                                <div className="vl"></div>
+                            </div>
+                            <div className="col-lg-5 col-md-5">
+                                <div className="product-content">
+                                    <h3 className="ml-5">{produit.descri}</h3>
+                                    <table className="product-info">
+                                       <tr><td><span>{t('home.PRIX')}:</span></td><td>{produit.prix}{t('home.PRICE')} </td></tr> 
+                                       <tr> <td><span>{t('home.QUAN')}:</span></td><td> {produit.quan}{t('home.KG')}</td></tr> 
+                                       <tr> <td><span>{t('home.CAT')}:</span></td><td>{produit.cat}</td></tr> 
+                                       <tr> <td><span>{t('home.PHO')}:</span></td><td>0{produit.phone}</td></tr> 
+                                    </table>
                                     <div className="product-add-to-cart mt-5">
                                         <button 
                                             type="submit" 
@@ -690,4 +857,5 @@ const img = {
         </div>
         
     )
+    }
 }

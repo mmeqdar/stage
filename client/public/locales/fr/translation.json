@@ -28,8 +28,8 @@
     },
     "register": 
     {  
-        "LABEL_NAME":"Nom de la Coopérative",
-        "LABEL_PHONE":"Téléphone de la Coopérative",
+        "LABEL_NAME":"Nom",
+        "LABEL_PHONE":"Téléphone",
         "LABEL_PASS":"Mot De Passe",
         "LABEL_CPASS":"Confirmation Mot De Passe",
         "LABEL_REG":"Région",

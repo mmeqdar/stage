@@ -28,8 +28,8 @@
     },
     "register": 
     {  
-        "LABEL_NAME":"Cooperative Name",
-        "LABEL_PHONE":"Cooperative Phone Number",
+        "LABEL_NAME":"Name",
+        "LABEL_PHONE":"Phone Number",
         "LABEL_PASS":"Password",
         "LABEL_CPASS":"Confirmation Password",
         "LABEL_REG":"Region",

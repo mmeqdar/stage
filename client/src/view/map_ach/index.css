@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/earlyaccess/amiri.css);
 .map
 {
   width: 100vw;
@@ -21,8 +22,10 @@
   border-color: blue;
 }
 .span
-{font: 1.5em sans-serif;
+{font-family: 'Amiri', serif;
   margin-right: 2px;
+  font-size: 150%;
+ 
 }
 .trInfo:hover
 {
@@ -35,7 +38,8 @@ cursor: pointer;
 .fullname
 {
   color: darkgreen;
-  margin-left: 20%;
+  margin-left: 30%;
+  font-size:large
 }
 .fullname:hover
 {

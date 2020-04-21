@@ -29,9 +29,9 @@ const REQ = {
     GET_BY_PSWD:
      'SELECT count(*) as cnt from user WHERE password = ?',
      GET_BY_NEXMO_PHONE:
-     'SELECT count(*) as cnt from user WHERE nexmo=? phone = ?',      
+     'SELECT count(*) as cnt from user WHERE nexmo=? and phone = ?',      
     ADD_USER:
-    'INSERT INTO `user`(`fullName`, `phone`, `password`,`type`, `lat`, `lng`) values (?,?,?,?,?,?)',
+    'INSERT INTO `user`(`fullName`, `phone`, `password`,`type`,`profil`,`lat`, `lng`) values (?,?,?,?,?,?,?)',
      UPDATE_NEXMO:
      'UPDATE `user` SET nexmo=? WHERE phone = ?',
      GET_VER:
@@ -75,7 +75,7 @@ const REQ = {
     UPDATE_PROFIL:
     "UPDATE `user` SET `profil`=? WHERE `id_user` = ?",
     GET_ALL_CF:
-    'SELECT c.*,u.fullName FROM `coop_ferme` c,user u WHERE c.id_user = u.id_user',
+    'SELECT c.*,u.fullName,u.profil FROM `coop_ferme` c,user u WHERE c.id_user = u.id_user',
     GET_ANN_NFO:
     'SELECT i.name_images,a.*,c.name_categorie,u.phone,u.fullName  FROM images i,annonces a,user u, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user  and  c.id_categorie = a.id_categorie and a.id_coop = ?',
     COUNT_CART:
@@ -89,7 +89,7 @@ const REQ = {
     ADD_FERME:
     "INSERT INTO `coop_ferme`(`id_user`, `lat`, `lng`, `type`) VALUES (?,?,?,?)",
     GET_FERME:
-    "SELECT * FROM `coop_ferme` WHERE `id_user` = ?",
+    "SELECT c.*,u.profil FROM coop_ferme c,user u WHERE c.id_user = ? and u.id_user = c.id_user",
     GET_ANN_CF:
     'SELECT i.name_images,a.*,c.name_categorie,u.phone  FROM images i,annonces a,user u, categorie c WHERE i.id_annonce = a.id_annonce and i.i = 0 and u.id_user = a.id_user   and c.id_categorie = a.id_categorie and a.id_coop = ?',
     GET_QUNATITE_ANN:
@@ -97,7 +97,7 @@ const REQ = {
     UPDATE_ANN_QUANTITE:
     'UPDATE `annonces` SET `quantity`= ? WHERE `id_annonce` = ?',
     GET_COOP:
-    "SELECT a.* FROM Cart c, annonces a WHERE a.id_annonce = c.id_annonce and c.id_user = ? GROUP BY a.id_coop",
+    "SELECT SUM(a.quantity*a.prix) as total,a.id_coop FROM Cart c, annonces a WHERE a.id_annonce = c.id_annonce and c.id_user = ? GROUP BY a.id_coop",
     }
 }
 module.exports = {

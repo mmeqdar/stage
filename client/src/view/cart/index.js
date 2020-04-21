@@ -3,6 +3,8 @@ import axios from "axios";
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
+
 
 var total = 0
 var ship = 0
@@ -17,25 +19,34 @@ var montant = 0
             props.history.push("/")
     })
     const { t } = useTranslation();
-    const [data, setData] = useState({ hits: [] });
+    const [data, setData] = useState({ hits: []});
+    const [data1, setData1] = useState({ coop: []});
     const fetchData = async () => {
         const result = await axios.post('http://localhost:3001/get_cart',{token:localStorage.getItem('token')});
         setData({hits:result.data});
       };
+    const fetchCoop = async () => {
+        const res = await axios.post('http://localhost:3001/get_coop',{token:localStorage.getItem('token')});
+        setData1({coop:res.data});
+    };
      useEffect(() => {
-         console.log("ttssssttt")
           fetchData();
+          fetchCoop();
+          console.table(data1)
       }, []);
-      if(data && data.hits)
+      if(data1 && data1.coop)
       {
-          for(var i= 0 ;i< data.hits.length ;i++)
-          {
-              total += data.hits[i].prix * data.hits[i].quantity
-          }
+        for(var i = 0 ;i < data1.coop.length  ;i++)
+        {
+            total += data1.coop[i].total
+            ship += 50
+        }
           if(total !== 0)
-         { ship = 50
-          montant = ship + total}
-      }
+         {   
+            
+            montant =ship+total
+         }
+        }
     return(
             <section className="cart-area ptb-60">
             <ToastContainer transition={Slide} />
@@ -52,30 +63,36 @@ var montant = 0
                                             <th scope="col">{t('home.PRIX')}</th>
                                             <th scope="col">{t('home.QUAN')}</th>
                                             <th scope="col">{t('home.Total')}</th>
+                                            <th scope="col">مجموع التعاونية</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                   {data && data.hits && data.hits.map((element,index)=>(
-                                    <tr key={index}>
-                                        <td  className="product-thumbnail">
-                                                <a href="#">
-                                                    <img src={`http://localhost:3001/images/${element.name_images}`} alt="item" />
-                                                </a>
-                                        </td>
+                                   {data1 && data1.coop && data1.coop.map((elem,i)=>(
+                                    <tr key={i} >
+                                        <td colSpan="4"> 
+                                        {data && data.hits && data.hits.map((element,index)=>(
+                                            <tr key={index}>
+                                                {element.id_coop == elem.id_coop && <td  className="product-thumbnail">
+                                                    <a href="#">
+                                                        <img src={`http://localhost:3001/images/${element.name_images}`} alt="item" />
+                                                    </a>
+                                                </td>}
 
-                                        <td className="product-price">
-                                            <span className="unit-amount">{element.prix} {t('home.PRICE')}</span>
-                                        </td>
+                                                {element.id_coop == elem.id_coop && <td className="product-price ">
+                                                    <span className="unit-amount price">{element.prix} {t('home.PRICE')}</span>
+                                                </td>}
 
-                                        <td className="product-quantity">
-                                            <span className="unit-amount">{element.quantity} {t('home.KG')}</span>
-                                            
-                                        </td>
+                                                {element.id_coop == elem.id_coop && <td className="product-quantity">
+                                                    <span className="unit-amount quantity">{element.quantity} {t('home.KG')}</span>
+                                                </td>}
 
-                                        <td className="product-subtotal">
-                                            <span className="subtotal-amount">{element.prix * element.quantity} {t('home.PRICE')}</span>
+                                                {element.id_coop == elem.id_coop && <td className="product-subtotal">
+                                                    <span className="subtotal-amount total">{element.prix * element.quantity} {t('home.PRICE')}</span>
+                                                </td>}
+                                            </tr>))}
                                         </td>
-                                    </tr>))}
+                                        <td>{elem.total}</td>
+                                     </tr>))}
                                     </tbody>
                                 </table>
                                 </div>
@@ -92,14 +109,14 @@ var montant = 0
 
                                 <div className="cart-totals">
                                     <h3>{t('home.CartTotals')}</h3>
-
                                     <ul>
                                         <li>{t('home.subtotal')} <span>{total} {t('home.PRICE')}</span></li>
                                         <li>{t('home.Shipping')} <span>{ship} {t('home.PRICE')}</span></li>
                                         <li>{t('home.Total')} <span><b>{montant} {t('home.PRICE')}</b></span></li>
                                     </ul>
                                         <a href="/checkout" className="btn btn-light">{t('home.delivery')}</a>
-                                        <a href="/checkout" className="btn btn-light ml-5">{t('home.credit')}</a>
+                                        <a href="/checkout" className="btn btn-light ml-2">{t('home.credit')}</a>
+                                        <a href="/checkout" className="btn btn-light ml-2">{t('home.PSP')}</a>
                                 </div>
                             </form>
                         </div>

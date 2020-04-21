@@ -74,8 +74,12 @@ class User {
                 {
                     var salt = bcrypt.genSaltSync(saltRounds);
                     var hash_pass = bcrypt.hashSync(pswd, salt);
-                    
-                    this.database.query(USERS.ADD_USER,[name,phone,hash_pass,type,lat,lng])
+                    var pic = "default.jpg"
+                    if(type == 0)
+                        pic = "shop.png"
+                    if(type == 2)
+                        pic = "ferme.png"
+                    this.database.query(USERS.ADD_USER,[name,phone,hash_pass,type,pic,lat,lng])
                     .then((r)=>{
                         console.table(r)
                         if(r.err)
@@ -123,7 +127,7 @@ class User {
 confirmation(id,code,phone)
 {
    return new Promise((resolve, reject) => ( 
-        this.database.query(USERS.GET_BY_NEXMO_PHONE,phone)
+        this.database.query(USERS.GET_BY_NEXMO_PHONE,[id,phone])
         .then((r)=>
         {
             if(r[0].cnt != 0)
@@ -148,6 +152,7 @@ confirmation(id,code,phone)
                                 this.database.query(USERS.GET_BY_PHONE,phone)
                                 .then((r)=>
                                 {
+                                    console.log("done")
                                     const token = jwt.sign({ id: r[0].id_user },'mmeqfall')
                                     const type = jwt.sign({ type: r[0].type },'mmeqfall')
                                     resolve({status :'success',data:r[0].type,token:token,type:type})
@@ -490,8 +495,8 @@ forgot1(id,code,phone)
             this.database.query(USERS.GET_COOP,id)
             .then((r)=>
             {
-                console.log(r)
-                resolve(r)
+               
+               resolve(r)
             })
             .catch(()=>
             {

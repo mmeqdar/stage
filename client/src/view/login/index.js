@@ -298,12 +298,12 @@ if(localStorage.getItem('langue')  !== "ar")
                                   </ContainerR>
                             </div>
 
-                            <div className="col-lg-6 col-md-12 mt-5">
+                            <div className="col-lg-6 col-md-12 mt-2 flou">
                                 <div className="new-customer-content">
-                                    <p className={classes.span}>{t('login.OPEN')}</p>
-                                      <p className={classes.p}>{t('login.TEXT')}</p>
-                                    <Link href="/register" >
-                                        <a className="btn btn-light">{t('login.OPEN')}</a>
+                                    <p className={classes.span} className="nonflou mt-5">{t('login.OPEN')}</p>
+                                      <p className={classes.p} className="nonflou">{t('login.TEXT')}</p>
+                                    <Link href="/register"className="mt-5" >
+                                        <button className="btn  btn-success btn-flou">{t('login.OPEN')}</button>
                                     </Link>
                                 </div>
                             </div>
@@ -317,15 +317,15 @@ else
 {
   return (
 <React.Fragment>
-    <section className="login-area scene__home">
+    <section className="login-area scene__home ">
         <div className="container">
             <div className="row">
-                <div className="col-lg-6 col-md-12 mt-5">
+                <div className="col-lg-6 col-md-12 mt-3 flou">
                     <div className="new-customer-content-ar" style={{paddingTop: "20px"}}>
-                        <p className={classes.span}>قم بإنشاء حساب</p>
-                        <p className={classes.p}>قم بالتسجيل للحصول على حساب مجاني في متجرنا. تسجيل سريع وسهل. يسمح لك أن تكون قادراً على الطلب من متجرنا. لبدء التسوق ، انقر فوق تسجيل.</p>
+                        <p className={classes.span} className="nonflou mt-3">قم بإنشاء حساب</p>
+                        <p className={classes.p} className="nonflou mt-5">قم بالتسجيل للحصول على حساب مجاني في متجرنا. تسجيل سريع وسهل. يسمح لك أن تكون قادراً على الطلب من متجرنا. لبدء التسوق ، انقر فوق إنشاء حساب.</p>
                         <Link href="/register" >
-                            <a className="btn btn-light btn-a">إنشاء حساب</a>
+                        <button className="btn  btn-a btn-success btn-flou mt-5">إنشاء حساب</button>
                         </Link>
                     </div>
                 </div>

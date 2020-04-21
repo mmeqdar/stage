@@ -453,27 +453,12 @@ const add_cart =  router.post('/add_cart', function (req, res) {
 const get_cart =  router.post('/get_cart', function (req, res) {
     const user = new User()
     const token = new Token()
-    var total_coop = 0
     token.token(req.body.token).then((r)=>{
         if(r !== -2)
         {
             user.get_cart(r)
             .then((r)=>
             {
-                for(var i = 0 ;i < r.length  ;i++)
-                {
-                    total_coop = (r[i].prix * r[i].quantity)
-                    for(var j = i ; j < r.length  ; j++)
-                    {  
-                        if(r[j+1] && r[j].id_coop == r[j+1].id_coop)
-                        {
-                            console.log(r[j].id_coop,r[j+1].id_coop)
-                            total_coop +=  (r[j+1].prix * r[j+1].quantity)  
-                            console.log(i+"----totaaall---"+total_coop)
-                        }
-                    }
-                    Object.assign(r[i], {total_coop: total_coop})
-                }
                 res.send(r)
             })
             .catch((err)=>{
@@ -518,6 +503,7 @@ const get_local =  router.post('/get_local', function (req, res) {
             user.get_local(r)
             .then((r)=>
             {
+                console.log(r)
                 res.send(r)
             })
             .catch((err)=>{

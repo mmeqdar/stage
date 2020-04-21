@@ -484,7 +484,7 @@ if(localStorage.getItem('langue') !== 'ar') {
  required
  fullWidth
  id="fullName"
- label="اسم التعاونية"
+ label="اسم"
  name="fullName"
  autoComplete="fname"
  onChange={handleChangeName}
@@ -502,7 +502,7 @@ if(localStorage.getItem('langue') !== 'ar') {
  required
  fullWidth
  id="phone"
- label="رقم هاتف التعاونية"
+ label="رقم هاتف"
  name="phone"
  autoComplete="phone"
  InputProps={{
