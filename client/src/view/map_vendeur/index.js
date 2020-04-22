@@ -231,6 +231,7 @@ const img = {
         useEffect(() => {
         const fetchData = async () => {
             const result = await axios.post('http://localhost:3001/get_local',{token:localStorage.getItem('token')});
+            if(result && result.data[0] && result.data[0].profil)
             setData({hits:result.data,profil:result.data[0].profil});
             };
         fetchData();
@@ -321,13 +322,6 @@ const img = {
         }
       </GoogleMap>
     );
-  };
-  const handleAddToCartFromView = ()=>
-  {
-    axios.post('http://localhost:3001/add_cart',{token:localStorage.getItem('token'),id:produit.id})
-    .then(()=>{
-
-    })
   };
   const [tn, setDatan] = useState({ n: false ,n2:false});
   const [infow, setDatainfo] = useState({ infowin :false,lat:null,lng:null,id_cf:null,open:false});
@@ -575,15 +569,6 @@ const img = {
                                        <tr> <td>{produit.cat}</td><td><span className="span">:{t('home.CAT')}</span></td></tr> 
                                        <tr> <td>0{produit.phone}</td><td><span className="span">:{t('home.PHO')}</span></td></tr> 
                                     </table>
-                                    <div className="product-add-to-cart mt-5">
-                                        <button 
-                                            type="submit" 
-                                            className="btn btn-primary"
-                                            onClick={handleAddToCartFromView}
-                                        >
-                                            <ShoppingCartIcon/> {t('home.ADD')}
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -733,15 +718,6 @@ const img = {
                                        <tr> <td><span>{t('home.CAT')}:</span></td><td>{produit.cat}</td></tr> 
                                        <tr> <td><span>{t('home.PHO')}:</span></td><td>0{produit.phone}</td></tr> 
                                     </table>
-                                    <div className="product-add-to-cart mt-5">
-                                        <button 
-                                            type="submit" 
-                                            className="btn btn-primary"
-                                            onClick={handleAddToCartFromView}
-                                        >
-                                            <ShoppingCartIcon/> {t('home.ADD')}
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>

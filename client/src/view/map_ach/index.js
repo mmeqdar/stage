@@ -40,10 +40,10 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
  export default  function Map(props){
-  axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
+ /* axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
     if(r.data.data == -2)
         props.history.push("/login") 
-  });
+  });*/
   const { t } = useTranslation();
   const [data, setData] = useState({ hits: [] });
   axios.post('http://localhost:3001/check_type',{type:localStorage.getItem('type')}).then((r)=>{
@@ -232,10 +232,10 @@ function Alert(props) {
   }
   const MapWrapped = withScriptjs(withGoogleMap(Map));
 
-   axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
+  /* axios.post('http://localhost:3001/check_token',{token:localStorage.getItem('token')}).then((r)=>{
         if(r.data.data == -2)
             props.history.push("/login") 
-    });
+    });*/
     const handleChangeQuantity = event =>
     { 
       quan_acheter = event.target.value
